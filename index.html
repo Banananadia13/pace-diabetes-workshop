@@ -1,0 +1,1628 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PACE Diabetes Workshop</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Interactive diabetes and exercise workshop for PACE Health team members and clients.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Lato:wght@400;700&family=Noto+Serif:wght@600;700&display=swap">
+<style>
+/* Layout: a workshop console. A sticky navy header with tab nav; each view is a two-pane bench (stage + controls) that stacks on phones. */
+:root{
+  --bg:#F5F6FB; --surface:#FFFFFF; --surface-2:#EDEFF8; --line:#D8DBEA;
+  --fg:#23264A; --muted:#5C607D; --head:#1F1B4F;
+  --navy:#1F1B4F; --on-navy:#FFFFFF;
+  --teal:#1A9C86; --teal-soft:#E3F3EF; --orange:#D9841F; --orange-soft:#FCEFD9;
+  --rose:#C2413A; --rose-soft:#FAE3E3; --lav-soft:#ECEFFA;
+  --glu:#E0912A; --ins:#3E6BD6; --gcg:#8A5CD1; --fat:#E9B949;
+  --blood:#F6D9D9; --ket:#C2347E; --wall:#EDCBC6; --wall-line:#B9807A; --ffa:#93A82E; --musc:#D86A62; --liver:#9E4B3B; --kid:#B86A52; --gutc:#E8A79C; --panc:#E6BE6A; --brainc:#C9A9E0; --body:#E6E8F3; --body-line:#B9BDD6; --cell:#ECE6F7; --mem:#4A4466;
+  --ok:#1A9C86; --warn:#D9841F; --bad:#C2413A;
+  --f-display:"Noto Serif", Georgia, "Times New Roman", serif;
+  --f-body:"Lato", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111228; --surface:#1A1B36; --surface-2:#232548; --line:#33365E;
+  --fg:#E8E9F6; --muted:#A4A7C6; --head:#DCDDFB;
+  --navy:#0B0B20; --on-navy:#F1F1FB;
+  --teal:#3CC3AA; --teal-soft:#16352F; --orange:#F0A84A; --orange-soft:#3A2C17;
+  --rose:#F07467; --rose-soft:#3A1E22; --lav-soft:#22244A;
+  --glu:#F0A84A; --ins:#7C9CF2; --gcg:#B08CF0; --fat:#E9C25E;
+  --blood:#4A2529; --ket:#F07AB8; --wall:#5A3439; --wall-line:#9B6A66; --ffa:#BCD05A; --musc:#E07B72; --liver:#C2685A; --kid:#CF846D; --gutc:#D99488; --panc:#E8C77E; --brainc:#B596D6; --body:#2A2C52; --body-line:#4A4E80; --cell:#2B2648; --mem:#B9B2DA;
+  --ok:#3CC3AA; --warn:#F0A84A; --bad:#F07467; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#111228; --surface:#1A1B36; --surface-2:#232548; --line:#33365E;
+  --fg:#E8E9F6; --muted:#A4A7C6; --head:#DCDDFB;
+  --navy:#0B0B20; --on-navy:#F1F1FB;
+  --teal:#3CC3AA; --teal-soft:#16352F; --orange:#F0A84A; --orange-soft:#3A2C17;
+  --rose:#F07467; --rose-soft:#3A1E22; --lav-soft:#22244A;
+  --glu:#F0A84A; --ins:#7C9CF2; --gcg:#B08CF0; --fat:#E9C25E;
+  --blood:#4A2529; --ket:#F07AB8; --wall:#5A3439; --wall-line:#9B6A66; --ffa:#BCD05A; --musc:#E07B72; --liver:#C2685A; --kid:#CF846D; --gutc:#D99488; --panc:#E8C77E; --brainc:#B596D6; --body:#2A2C52; --body-line:#4A4E80; --cell:#2B2648; --mem:#B9B2DA;
+  --ok:#3CC3AA; --warn:#F0A84A; --bad:#F07467; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--navy)}
+h1,h2,h3{font-family:var(--f-display);color:var(--head);text-wrap:balance;margin:0;line-height:1.2}
+h2{font-size:clamp(24px,3vw,32px)}
+h3{font-size:19px}
+p{margin:0}
+a{color:var(--teal)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:6px}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.tiny{font-size:13px;color:var(--muted)}
+.wrap{max-width:1260px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--navy);color:var(--on-navy)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;padding-block:10px}
+.brand{display:grid;line-height:1.15}
+.brand .eyebrow{color:rgba(255,255,255,.7)}
+.brand strong{font-family:var(--f-display);font-size:20px;color:var(--on-navy)}
+.nav{display:flex;flex-wrap:wrap;gap:4px;flex:1 1 520px}
+.nav a{color:var(--on-navy);text-decoration:none;font-weight:700;font-size:14.5px;padding:7px 11px;border-radius:999px;opacity:.82}
+.nav a:hover{opacity:1;background:rgba(255,255,255,.08)}
+.nav a[aria-current="page"]{opacity:1;background:var(--teal);color:#fff}
+.mode{display:flex;align-items:center;gap:8px;font-size:13px}
+.mode .seg{background:rgba(255,255,255,.1);border-color:transparent}
+.mode .seg button{color:var(--on-navy)}
+.mode .seg button[aria-pressed="true"]{background:var(--on-navy);color:var(--navy)}
+
+/* generic controls */
+.seg{display:inline-flex;flex-wrap:wrap;gap:3px;padding:3px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:999px;font-weight:700;font-size:14px;cursor:pointer;color:var(--fg)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--head);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.seg.teal button[aria-pressed="true"]{background:var(--teal);color:#fff}
+.btn{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;color:var(--head)}
+.btn:hover{border-color:var(--teal)}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.ctl{display:grid;gap:6px}
+.ctl-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ctl label,.ctl .lab{font-weight:700;font-size:14.5px}
+.ctl output{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.switch{display:flex;align-items:center;gap:10px;font-size:14.5px;cursor:pointer}
+.switch input{width:18px;height:18px;accent-color:var(--teal)}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--fg);white-space:nowrap}
+.pill.ok{background:var(--teal-soft);color:var(--teal)}
+.pill.warn{background:var(--orange-soft);color:var(--orange)}
+.pill.bad{background:var(--rose-soft);color:var(--rose)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;padding:2px 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
+.tag.strong{border-color:var(--teal);color:var(--teal)}
+.tag.moderate{border-color:var(--orange);color:var(--orange)}
+.tag.illus{border-style:dashed}
+
+/* views */
+main{padding-block:22px 40px}
+.view{display:grid;gap:18px}
+.view-head{display:grid;gap:6px;max-width:80ch}
+.view-head p{color:var(--muted)}
+.bench{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:18px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:14px;min-width:0}
+.panel.flat{background:transparent;border:0;padding:0}
+.stack{display:grid;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.svg-host{width:100%;overflow-x:auto}
+.svg-host svg{display:block;width:100%;height:auto}
+.callout{border-left:4px solid var(--teal);background:var(--teal-soft);padding:10px 14px;border-radius:0 8px 8px 0}
+.callout.orange{border-color:var(--orange);background:var(--orange-soft)}
+.callout.rose{border-color:var(--rose);background:var(--rose-soft)}
+.callout.navy{border-color:var(--head);background:var(--lav-soft)}
+.callout strong{display:block;color:var(--head);margin-bottom:2px}
+.callout.orange strong{color:var(--orange)}
+.callout.rose strong{color:var(--rose)}
+.callout p{font-size:14.5px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14.5px}
+.kv dt{font-weight:700;color:var(--head)}
+.kv dd{margin:0}
+ul.clean{margin:0;padding-left:18px;display:grid;gap:4px}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th{text-align:left;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding:6px 8px}
+table.t td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+.table-host{overflow-x:auto}
+
+/* mode visibility */
+body.mode-client .team-only{display:none!important}
+body.mode-team .client-only{display:none!important}
+
+/* start */
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:center}
+.hero h1{font-size:clamp(32px,5vw,52px);letter-spacing:-.01em}
+.hero .tagline{font-family:var(--f-display);font-size:clamp(18px,2.2vw,24px);color:var(--teal);margin-top:6px}
+.question{border-left:4px solid var(--teal);background:var(--teal-soft);padding:12px 16px;border-radius:0 8px 8px 0;max-width:62ch}
+.question strong{color:var(--teal);display:block;font-family:var(--f-display)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{display:grid;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;text-decoration:none;color:var(--fg)}
+.tile:hover{border-color:var(--teal)}
+.tile b{color:var(--head);font-family:var(--f-display);font-size:17px}
+.tile span{font-size:14px;color:var(--muted)}
+.myths{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.myth{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:14px;text-align:left;cursor:pointer;display:grid;gap:8px;align-content:start;min-height:150px}
+.myth .q{font-family:var(--f-display);font-weight:700;color:var(--head);font-size:16.5px}
+.myth .a{display:none;font-size:14.5px}
+.myth[aria-expanded="true"]{border-color:var(--teal);background:var(--teal-soft)}
+.myth[aria-expanded="true"] .a{display:block}
+.myth[aria-expanded="true"] .hint{display:none}
+.myth .hint{font-size:13px;color:var(--teal);font-weight:700}
+.verdict{font-family:var(--f-mono);font-size:12px;font-weight:500}
+
+/* body map */
+.node{cursor:pointer}
+.node rect{transition:stroke-width .15s}
+.node:hover rect,.node:focus rect{stroke-width:2.5}
+.node:focus{outline:none}
+.node:focus-visible rect{stroke:var(--orange);stroke-width:3}
+.node.sel rect{stroke:var(--teal);stroke-width:3}
+.state-ok{fill:var(--surface)}
+.state-strain{fill:var(--orange-soft)}
+.state-broken{fill:var(--rose-soft)}
+.detail h3{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.legend i.sq{border-radius:3px}
+
+/* readouts */
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.ro{background:var(--surface-2);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
+.ro b{font-family:var(--f-mono);font-size:22px;color:var(--head);font-weight:500}
+.ro span{font-size:12.5px;color:var(--muted)}
+.tirbar{display:flex;height:16px;border-radius:999px;overflow:hidden;background:var(--surface-2)}
+.tirbar div{height:100%}
+
+/* safety */
+.steps{display:grid;gap:8px;counter-reset:s}
+.step{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--surface)}
+.step .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font-family:var(--f-mono);font-weight:500}
+.step.on{border-color:var(--rose);background:var(--rose-soft)}
+.step.on .n{background:var(--rose);color:#fff}
+.step.done{opacity:.6}
+.outcome{border-radius:10px;padding:14px;display:grid;gap:6px;border:2px solid var(--line)}
+.outcome.go{border-color:var(--ok);background:var(--teal-soft)}
+.outcome.adjust{border-color:var(--warn);background:var(--orange-soft)}
+.outcome.stop{border-color:var(--bad);background:var(--rose-soft)}
+.outcome b{font-family:var(--f-display);font-size:18px;color:var(--head)}
+details.acc{border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+details.acc summary{cursor:pointer;padding:10px 14px;font-weight:700;color:var(--head)}
+details.acc > div{padding:0 14px 12px;font-size:14.5px;display:grid;gap:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer;font-weight:700;color:var(--fg)}
+.chips button[aria-pressed="true"]{background:var(--head);border-color:var(--head);color:var(--bg)}
+.meter{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.meter > div{height:100%;border-radius:999px;transition:width .3s}
+
+/* stories */
+.story{display:grid;gap:12px}
+.story header{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
+.cols2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.box{border-radius:8px;padding:12px;font-size:14.5px;display:grid;gap:4px}
+.box.know{background:var(--teal-soft)}
+.box.believe{background:var(--orange-soft)}
+.box h4{margin:0;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--head)}
+
+/* plan */
+.week{display:grid;gap:8px}
+.day{display:grid;grid-template-columns:54px minmax(0,1fr) minmax(0,1.2fr);gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.day b{font-family:var(--f-mono)}
+.day select,.day input[type=text],textarea{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:6px 8px;width:100%;min-width:0}
+.day .moves{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13.5px}
+.day .moves label{display:flex;gap:5px;align-items:center}
+textarea{min-height:64px;resize:vertical}
+
+/* quiz */
+.qcard{display:grid;gap:10px}
+.opts{display:grid;gap:6px}
+.opts button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:15px;color:var(--fg)}
+.opts button.right{border-color:var(--ok);background:var(--teal-soft)}
+.opts button.wrong{border-color:var(--bad);background:var(--rose-soft)}
+.opts button:disabled{cursor:default}
+
+footer{border-top:1px solid var(--line);padding-block:18px 30px;font-size:13.5px;color:var(--muted)}
+footer .wrap{display:grid;gap:8px}
+
+@media (max-width:980px){
+  .bench,.hero{grid-template-columns:1fr}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid3{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  #map-svg{min-width:560px}
+  #bodyfig-svg{min-width:600px}
+  #cell-svg,#panc-svg,#liver-svg,#vessel-svg{min-width:520px}
+  #day-svg,#lens-svg{min-width:600px}
+  .grid2,.cols2,.tiles{grid-template-columns:1fr}
+  .day{grid-template-columns:44px minmax(0,1fr)}
+  .day .moves{grid-column:1 / -1}
+  .nav a{padding:6px 9px;font-size:13.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* body figure */
+.bpart{cursor:pointer}
+.bpart > *{stroke:var(--surface);stroke-width:1.2;transition:stroke-width .15s}
+.bpart.st-strain > *{stroke:var(--orange);stroke-width:2.4}
+.bpart.st-broken > *{stroke:var(--rose);stroke-width:2.8}
+.bpart:hover > *{stroke-width:3}
+.bpart.sel > *{stroke:var(--teal);stroke-width:3.4}
+.bpart:focus{outline:none}
+.bpart:focus-visible > *{stroke:var(--orange);stroke-width:3.4}
+.blab{cursor:pointer}
+.blab text{font-size:13px;font-weight:700;fill:var(--head)}
+.blab.sel text{fill:var(--teal)}
+.blab line{stroke:var(--muted);stroke-width:1;opacity:.6}
+.ketbar{position:relative;height:16px;border-radius:999px;background:linear-gradient(90deg,var(--teal) 0 14.3%,var(--orange) 14.3% 35.7%,var(--rose) 35.7% 71.4%,var(--ket) 71.4% 100%);opacity:.9}
+.ketbar i{position:absolute;top:-4px;width:4px;height:24px;border-radius:2px;background:var(--head);transform:translateX(-2px);transition:left .3s}
+.ketscale{position:relative;height:16px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+
+/* glucose regulation panel */
+.glu-panel{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);align-items:start}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chain .ch{background:var(--surface-2);border-radius:8px;padding:7px 10px;font-size:14px;max-width:230px}
+.chain .ch.on{background:var(--teal-soft);color:var(--fg)}
+.chain .ch.warn{background:var(--orange-soft)}
+.chain .ch.bad{background:var(--rose-soft)}
+.chain .chw{display:inline-flex;align-items:center;gap:6px}
+.chain .ar{color:var(--muted);font-family:var(--f-mono)}
+@media (max-width:980px){.glu-panel{grid-template-columns:1fr}}
+
+.step.on-v{border-color:var(--orange);background:var(--orange-soft)}
+.step.on-v .n{background:var(--orange);color:#fff}
+</style>
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><span class="eyebrow">PACE Health · Module 2</span><strong>Diabetes &amp; Exercise</strong></div>
+    <nav class="nav" aria-label="Workshop sections">
+      <a href="#start">Start</a>
+      <a href="#body">Body map</a>
+      <a href="#day">Glucose day</a>
+      <a href="#exercise">Exercise lens</a>
+      <a href="#safety">Safety</a>
+      <a href="#stories">Stories</a>
+      <a href="#plan">My plan</a>
+      <a href="#quiz" class="team-only">Check yourself</a>
+    </nav>
+    <div class="mode"><span>View for</span>
+      <div class="seg" role="group" aria-label="Audience" id="mode-seg">
+        <button data-mode="team" aria-pressed="true">Team</button>
+        <button data-mode="client" aria-pressed="false">Client</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- START -->
+<section class="view" id="view-start" data-view="start">
+  <div class="hero">
+    <div class="stack">
+      <span class="eyebrow">Diabetes &amp; Exercise workshop</span>
+      <h1>Your body runs on a glucose conversation</h1>
+      <p class="tagline">Use glucose. Build capacity. Reduce risk.</p>
+      <p class="team-only muted" style="max-width:62ch">An interactive companion to the PACE Diabetes &amp; Exercise Participant Workbook. Explore type 1 diabetes, type 2 diabetes and prediabetes as a whole-body system, then see what one session and months of training change.</p>
+      <p class="client-only muted" style="max-width:62ch">Explore how your body manages glucose, what changes with diabetes or prediabetes, and why moving your muscles is one of the most powerful tools you have.</p>
+      <div class="question team-only"><strong>The question for today</strong>How do we use exercise as a therapeutic tool for a person with diabetes, and prescribe it safely around their glucose, medications, complications and life?</div>
+    </div>
+    <div class="panel">
+      <span class="eyebrow">Where to go</span>
+      <div class="tiles" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <a class="tile" href="#body"><b>Body map</b><span>Eight organs and one shared signal</span></a>
+        <a class="tile" href="#day"><b>Glucose day</b><span>A 24-hour CGM trace you can change</span></a>
+        <a class="tile" href="#exercise"><b>Exercise lens</b><span>During, after and adapted</span></a>
+        <a class="tile" href="#safety"><b>Safety</b><span>Lows, highs, ketones, medicines</span></a>
+        <a class="tile" href="#stories"><b>Stories</b><span>Kevin, Priya and Sam</span></a>
+        <a class="tile" href="#plan"><b>My plan</b><span>Build a week you can repeat</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="stack">
+    <div class="row" style="justify-content:space-between"><h2>Myth or fact?</h2><span class="tiny">Tap a card to see what the evidence says</span></div>
+    <div class="myths" id="myths"></div>
+  </div>
+  <div class="grid3 team-only">
+    <div class="callout navy"><strong>1 in 9 adults</strong><p>589 million adults live with diabetes; over 90% have type 2, and about 4 in 10 do not know it yet (IDF 2025).</p></div>
+    <div class="callout"><strong>HbA1c −0.67%</strong><p>Average effect of structured exercise in type 2 diabetes; −0.89% with more than 150 min a week (Umpierre 2011).</p></div>
+    <div class="callout orange"><strong>58% fewer new cases</strong><p>Lifestyle change in people with prediabetes, over about 3 years in the Diabetes Prevention Program.</p></div>
+  </div>
+</section>
+
+<!-- BODY MAP -->
+<section class="view" id="view-body" data-view="body" hidden>
+  <div class="view-head">
+    <span class="eyebrow">Body map</span>
+    <h2>Eight organs, one shared signal</h2>
+    <p>Blood glucose is set by organs talking to each other. Each type of diabetes breaks a different part of that conversation. Pick a layer, then tap an organ or muscle.</p>
+  </div>
+  <div class="row">
+    <div class="seg" role="group" aria-label="Diagram style" id="mapview-seg">
+      <button data-mv="body" aria-pressed="true">Body</button>
+      <button data-mv="organ" aria-pressed="false">Organ map</button>
+    </div>
+    <div class="seg teal" role="group" aria-label="Diabetes layer" id="layer-seg">
+      <button data-layer="healthy" aria-pressed="false">No diabetes</button>
+      <button data-layer="pre" aria-pressed="false">Prediabetes</button>
+      <button data-layer="t2" aria-pressed="true">Type 2</button>
+      <button data-layer="t1" aria-pressed="false">Type 1</button>
+    </div>
+    <label class="switch"><input type="checkbox" id="map-ex"> Exercising now</label>
+    <div class="ctl t1-only" id="t1ins-wrap" hidden><div class="seg" role="group" aria-label="Insulin in type 1" id="t1ins-seg">
+      <button data-ti="ok" aria-pressed="true">Insulin as planned</button>
+      <button data-ti="low" aria-pressed="false">Not enough insulin</button>
+    </div></div>
+  </div>
+  <div class="panel glu-panel">
+    <div class="stack">
+      <div class="ctl"><div class="ctl-top"><label for="g-slider">Blood glucose right now</label><span><b class="num" id="g-out"></b> <span class="pill" id="g-pill"></span></span></div>
+        <input type="range" id="g-slider" min="2.5" max="16" step="0.1" value="5.2"></div>
+      <div class="row"><button class="btn" data-gp="3.2">Push it low</button><button class="btn" data-gp="5.2">Normal</button><button class="btn" data-gp="11">After a big meal</button><button class="btn" data-gp="15">Very high</button></div>
+      <p class="tiny">Drag the slider or press a button, then let go and watch the body bring glucose back. Time is sped up.</p>
+    </div>
+    <div class="stack"><span class="eyebrow" id="chain-head">How the body responds</span><div class="chain" id="g-chain"></div><p class="tiny" id="g-note"></p></div>
+  </div>
+  <div class="bench">
+    <div class="panel">
+      <div class="svg-host" id="bodyfig-host"><svg id="bodyfig-svg" viewBox="0 0 760 600" role="img" aria-label="Front and back body diagram with muscles and organs that control glucose"></svg></div>
+      <div class="svg-host" id="map-host" hidden><svg id="map-svg" viewBox="0 0 640 540" role="img" aria-label="Body map of organs that control blood glucose"></svg></div>
+      <div class="legend">
+        <span><i style="background:var(--glu)"></i>Glucose</span>
+        <span><i style="background:var(--ins)"></i>Insulin</span>
+        <span><i style="background:var(--gcg)"></i>Glucagon and stress hormones</span>
+        <span class="ket-leg" hidden><i style="background:var(--ffa)"></i>Fatty acids</span>
+        <span class="ket-leg" hidden><i style="background:var(--ket)"></i>Ketones</span>
+        <span><i class="sq" style="background:var(--surface);border:1px solid var(--line)"></i>Working well</span>
+        <span><i class="sq" style="background:var(--orange-soft);border:1px solid var(--orange)"></i>Under strain</span>
+        <span><i class="sq" style="background:var(--rose-soft);border:1px solid var(--rose)"></i>Not working</span>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="panel detail" id="map-detail" aria-live="polite"></div>
+      <div class="panel" id="ket-panel" hidden aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="view-head" style="margin-top:8px">
+    <span class="eyebrow">Zoom in</span>
+    <h2 id="zoom-h">Inside a muscle cell</h2>
+    <p id="zoom-p"></p>
+  </div>
+  <div class="row"><div class="seg teal" role="group" aria-label="Zoom" id="zoom-seg">
+    <button data-z="cell" aria-pressed="true">Muscle cell</button>
+    <button data-z="pancreas" aria-pressed="false">Pancreas</button>
+    <button data-z="liver" aria-pressed="false">Liver</button>
+    <button data-z="vessel" aria-pressed="false">Blood vessel</button>
+  </div><span class="tiny">Uses the layer and the blood glucose set above.</span></div>
+  <div class="bench">
+    <div class="panel">
+      <div class="svg-host" data-zs="cell"><svg id="cell-svg" viewBox="0 0 640 320" role="img" aria-label="Muscle cell with insulin receptors and glucose doors"></svg></div>
+      <div class="svg-host" data-zs="pancreas" hidden><svg id="panc-svg" viewBox="0 0 640 320" role="img" aria-label="Pancreatic islet with beta and alpha cells"></svg></div>
+      <div class="svg-host" data-zs="vessel" hidden><svg id="vessel-svg" viewBox="0 0 640 320" role="img" aria-label="Artery with blood flowing through and the wall changing over time"></svg></div>
+      <div class="svg-host" data-zs="liver" hidden><svg id="liver-svg" viewBox="0 0 640 320" role="img" aria-label="Liver cell storing and releasing glucose"></svg></div>
+      <div class="legend" id="zoom-legend"></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><span class="lab">Layer</span><span id="cell-layer" class="pill">Type 2</span></div>
+      <div data-zs="cell" class="stack">
+        <label class="switch" id="cell-ins-wrap"><input type="checkbox" id="cell-ins"> Insulin taken (injection or pump)</label>
+        <label class="switch"><input type="checkbox" id="cell-con"> Muscle contracting</label>
+        <div class="readouts">
+          <div class="ro"><b id="ro-ins">–</b><span>Insulin in blood</span></div>
+          <div class="ro"><b id="ro-need">–</b><span>Insulin needed per door</span></div>
+          <div class="ro"><b id="ro-doors">0/8</b><span>Doors open</span></div>
+          <div class="ro"><b id="ro-blood">–</b><span>Glucose left in blood</span></div>
+          <div class="ro" id="ro-ket-wrap" hidden><b id="ro-ket">–</b><span>Ketones in blood</span></div>
+        </div>
+        <p id="cell-text" style="font-size:14.5px"></p>
+        <details class="acc ket-leg-d" id="ket-research"><summary>Do ketones open GLUT4 doors?</summary><div>
+          <p><b>No.</b> Ketones are not glucose and do not use GLUT4. They enter muscle through monocarboxylate transporters (mainly MCT1), moving down their concentration gradient without needing insulin. <span class="tag strong">Strong</span></p>
+          <p>Inside the cell, mitochondria convert them (via the enzymes BDH1 and SCOT) to acetyl-CoA, which is burned for energy. Muscle, heart and brain all burn ketones; the liver makes them but cannot use them. <span class="tag strong">Strong</span></p>
+          <p>In ketoacidosis, the liver makes ketones faster than muscle and other tissues can burn them, so they build up in the blood and it becomes acidic. <span class="tag strong">Strong</span></p>
+          <p class="team-only">High ketones may even make muscle less responsive to insulin: in isolated mouse muscle, 5 mM β-hydroxybutyrate blocked part of the insulin signal (Akt) and cut insulin-stimulated glucose uptake in oxidative muscle. Human relevance is still being studied. <span class="tag">Emerging</span></p>
+          <p class="tiny">Sources: Puchalska &amp; Crawford, Cell Metab 2017; Arima, J Atheroscler Thromb 2023; Am J Physiol Endocrinol Metab 2010 (β-hydroxybutyrate and muscle glucose transport); GPnotebook, DKA pathogenesis.</p>
+        </div></details>
+        <div class="ctl"><span class="lab">Insulin rises first, glucose follows</span>
+          <div class="svg-host"><svg id="stage-svg" viewBox="0 0 520 190" role="img" aria-label="Insulin and glucose across the stages from healthy to type 2 diabetes"></svg></div>
+          <p class="tiny">Illustrative. Insulin resistance makes the pancreas release more insulin for years, keeping glucose near normal. Glucose only rises once the beta cells can no longer keep up.</p></div>
+        <p class="tiny team-only">Contraction moves GLUT4 to the surface through AMPK and other pathways, separate from the insulin receptor. Uptake and insulin sensitivity stay higher for up to about 48 hours (Pereira 2017). <span class="tag illus">Illustrative</span></p>
+      </div>
+      <div data-zs="pancreas" class="stack" hidden>
+        <div class="readouts">
+          <div class="ro"><b id="pz-beta">–</b><span>Working beta cells</span></div>
+          <div class="ro"><b id="pz-ins">–</b><span>Insulin output</span></div>
+          <div class="ro"><b id="pz-gcg">–</b><span>Glucagon output</span></div>
+        </div>
+        <p id="panc-text" style="font-size:14.5px"></p>
+        <p class="tiny team-only" id="panc-team"></p>
+      </div>
+      <div data-zs="vessel" class="stack" hidden>
+        <div class="ctl"><div class="ctl-top"><label for="v-yrs">Years living with this</label><output id="v-yrs-out"></output></div>
+          <input type="range" id="v-yrs" min="0" max="30" step="1" value="10"></div>
+        <label class="switch"><input type="checkbox" id="v-care"> Regular exercise and good glucose, BP and lipid care</label>
+        <div class="readouts">
+          <div class="ro"><b id="vz-line">–</b><span>Lining</span></div>
+          <div class="ro"><b id="vz-plq">–</b><span>Plaque</span></div>
+          <div class="ro"><b id="vz-wall">–</b><span>Artery wall</span></div>
+          <div class="ro"><b id="vz-bp">–</b><span>Blood pressure, illustrative</span></div>
+          <div class="ro"><b id="vz-gly">–</b><span>Glucose sticking to LDL (now)</span></div>
+          <div class="ro"><b id="vz-open">–</b><span>Artery open</span></div>
+        </div>
+        <p id="vessel-text" style="font-size:14.5px"></p>
+        <div class="steps" id="v-steps"></div>
+        <details class="acc"><summary>What the research says</summary><div>
+          <p>Plaque starts when LDL particles slip through a damaged lining and are trapped in the artery wall. Modified LDL is swallowed by macrophages through scavenger receptors, which turns them into foam cells. <span class="tag strong">Strong</span></p>
+          <p>In diabetes, glucose and reactive by-products such as methylglyoxal attach to LDL (glycation). Glycated LDL is recognised less by normal LDL receptors and more by macrophage receptors, which drives cholesterol loading in cell studies (Brown 2005). Only a few per cent of LDL is glycated in people, so it adds to the effect of LDL level, blood pressure and smoking rather than replacing it. <span class="tag moderate">Moderate</span></p>
+          <p>Advanced glycation end products cross-link collagen and damage elastin, stiffening arteries. Stiffer arteries raise pulse wave velocity, systolic pressure and pulse pressure (Li 2025). <span class="tag moderate">Moderate</span></p>
+          <p>Exercise training improves lining function in type 2 diabetes: flow-mediated dilation up 1.8% overall and 2.5% with combined aerobic and resistance training (Qiu 2018, 16 studies). <span class="tag strong">Strong</span></p>
+          <p class="tiny">Timescales and blood pressure numbers in this view are illustrative.</p>
+        </div></details>
+      </div>
+      <div data-zs="liver" class="stack" hidden>
+        <div class="readouts">
+          <div class="ro"><b id="lz-gly">–</b><span>Glycogen store</span></div>
+          <div class="ro"><b id="lz-mode">–</b><span>Glucose right now</span></div>
+          <div class="ro"><b id="lz-fat">–</b><span>Liver fat</span></div>
+          <div class="ro"><b id="lz-ket">–</b><span>Ketones</span></div>
+        </div>
+        <p id="liver-text" style="font-size:14.5px"></p>
+        <p class="tiny team-only" id="liver-team"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLUCOSE DAY -->
+<section class="view" id="view-day" data-view="day" hidden>
+  <div class="view-head">
+    <span class="eyebrow">Glucose day</span>
+    <h2>A day on a CGM</h2>
+    <p>Change the person, the meals and the day. Watch the trace and the time in range. The same HbA1c can hide very different days.</p>
+  </div>
+  <div class="bench">
+    <div class="panel">
+      <div class="row" style="justify-content:space-between">
+        <strong id="day-title" style="color:var(--head)"></strong>
+        <span class="tag illus">Illustrative model</span>
+      </div>
+      <div class="svg-host"><svg id="day-svg" viewBox="0 0 760 320" role="img" aria-label="24-hour glucose trace"></svg></div>
+      <div class="readouts">
+        <div class="ro"><b id="d-tir">–</b><span>Time in range 3.9–10</span></div>
+        <div class="ro"><b id="d-tbr">–</b><span>Below 3.9</span></div>
+        <div class="ro"><b id="d-tar">–</b><span>Above 10</span></div>
+        <div class="ro"><b id="d-mean">–</b><span>Average mmol/L</span></div>
+        <div class="ro team-only"><b id="d-gmi">–</b><span>GMI (estimated A1c)</span></div>
+      </div>
+      <div class="tirbar" id="d-bar" aria-hidden="true"></div>
+      <p class="tiny">Targets for most adults: more than 70% in range, less than 4% below 3.9 and less than 1% below 3.0 (International consensus on time in range, 2019). In Australia, “below 4” means treat a low.</p>
+      <div class="callout" id="day-note"></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><span class="lab">Person</span>
+        <div class="seg teal" role="group" aria-label="Diabetes type" id="day-type">
+          <button data-t="healthy" aria-pressed="false">No diabetes</button>
+          <button data-t="pre" aria-pressed="false">Prediabetes</button>
+          <button data-t="t2" aria-pressed="true">Type 2</button>
+          <button data-t="t1" aria-pressed="false">Type 1</button>
+        </div>
+      </div>
+      <div class="ctl" id="day-med-wrap"><label for="day-med">Medicines (type 2)</label>
+        <select id="day-med">
+          <option value="none">None</option>
+          <option value="met" selected>Metformin</option>
+          <option value="glp">Metformin + GLP-1 RA (e.g. semaglutide)</option>
+          <option value="sglt">Metformin + SGLT2 inhibitor</option>
+          <option value="su">Metformin + sulfonylurea</option>
+          <option value="ins">Metformin + basal insulin</option>
+        </select>
+      </div>
+      <div class="ctl" id="day-t1-wrap" hidden><span class="lab">Insulin delivery (type 1)</span>
+        <div class="seg" role="group" aria-label="Insulin delivery" id="day-aid">
+          <button data-aid="mdi" aria-pressed="true">Injections or pump</button>
+          <button data-aid="aid" aria-pressed="false">Automated delivery</button>
+        </div>
+        <div class="ctl"><div class="ctl-top"><label for="day-bolus">Meal insulin vs food</label><output id="day-bolus-out"></output></div>
+          <input type="range" id="day-bolus" min="-1" max="1" step="0.5" value="0"></div>
+      </div>
+      <div class="ctl"><div class="ctl-top"><label for="day-carb">Carbohydrate per meal</label><output id="day-carb-out"></output></div>
+        <input type="range" id="day-carb" min="20" max="110" step="10" value="60"></div>
+      <div class="ctl"><span class="lab">Exercise session</span>
+        <select id="day-ex">
+          <option value="none">None today</option>
+          <option value="walk" selected>Brisk walk, 30 min</option>
+          <option value="res">Resistance session, 45 min</option>
+          <option value="hiit">HIIT, 20 min</option>
+        </select>
+      </div>
+      <div class="ctl" id="day-ext-wrap"><div class="ctl-top"><label for="day-ext">Session start</label><output id="day-ext-out"></output></div>
+        <input type="range" id="day-ext" min="6" max="21" step="0.5" value="17"></div>
+      <label class="switch" id="day-plan-wrap"><input type="checkbox" id="day-plan"> Diabetes plan adjusted for exercise</label>
+      <label class="switch"><input type="checkbox" id="day-pmw"> 10-min walk after dinner</label>
+      <label class="switch"><input type="checkbox" id="day-sit"> Sitting broken up every 30 min</label>
+      <label class="switch"><input type="checkbox" id="day-sleep"> Short night's sleep</label>
+      <label class="switch"><input type="checkbox" id="day-stress"> Stressful day</label>
+      <div class="ctl"><div class="ctl-top"><label for="day-train">Weeks of regular training</label><output id="day-train-out"></output></div>
+        <input type="range" id="day-train" min="0" max="16" step="1" value="0"></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXERCISE LENS -->
+<section class="view" id="view-exercise" data-view="exercise" hidden>
+  <div class="view-head">
+    <span class="eyebrow">Exercise lens</span>
+    <h2>During, after, adapted</h2>
+    <p>One session changes today's glucose. Training changes the system. Pick an exercise and a person, then move through the three windows.</p>
+  </div>
+  <div class="row">
+    <div class="seg teal" role="group" aria-label="Time window" id="lens-win">
+      <button data-w="during" aria-pressed="true">During · minutes</button>
+      <button data-w="after" aria-pressed="false">After · 48 hours</button>
+      <button data-w="adapted" aria-pressed="false">Adapted · weeks</button>
+    </div>
+  </div>
+  <div class="bench">
+    <div class="panel">
+      <div class="row" style="justify-content:space-between"><strong id="lens-title" style="color:var(--head)"></strong><span id="lens-tag"></span></div>
+      <div class="svg-host"><svg id="lens-svg" viewBox="0 0 760 320" role="img" aria-label="Exercise effect over time"></svg></div>
+      <div class="readouts" id="lens-meters"></div>
+      <div class="grid3" id="lens-cards"></div>
+    </div>
+    <div class="panel">
+      <div class="ctl" id="lens-type-wrap"><span class="lab">Exercise</span>
+        <div class="chips" id="lens-type">
+          <button data-x="walk" aria-pressed="true">Brisk walk</button>
+          <button data-x="res" aria-pressed="false">Resistance</button>
+          <button data-x="hiit" aria-pressed="false">HIIT or sprints</button>
+          <button data-x="pmw" aria-pressed="false">Walk after a meal</button>
+        </div>
+      </div>
+      <div class="ctl" id="lens-who-wrap"><span class="lab">Person</span>
+        <div class="chips" id="lens-who">
+          <button data-p="pre" aria-pressed="false">Prediabetes</button>
+          <button data-p="t2" aria-pressed="true">Type 2, metformin</button>
+          <button data-p="t2i" aria-pressed="false">Type 2, insulin or sulfonylurea</button>
+          <button data-p="t1" aria-pressed="false">Type 1</button>
+        </div>
+      </div>
+      <div id="lens-adapt-ctl" class="stack" hidden>
+        <div class="ctl"><div class="ctl-top"><label for="ad-min">Aerobic minutes a week</label><output id="ad-min-out"></output></div>
+          <input type="range" id="ad-min" min="0" max="300" step="15" value="150"></div>
+        <div class="ctl"><div class="ctl-top"><label for="ad-res">Resistance sessions a week</label><output id="ad-res-out"></output></div>
+          <input type="range" id="ad-res" min="0" max="3" step="1" value="2"></div>
+        <div class="ctl"><div class="ctl-top"><label for="ad-wk">Week</label><output id="ad-wk-out"></output></div>
+          <input type="range" id="ad-wk" min="0" max="24" step="1" value="12"></div>
+        <label class="switch"><input type="checkbox" id="ad-stop"> Stop training after week 12</label>
+      </div>
+      <div class="callout" id="lens-note"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="view" id="view-safety" data-view="safety" hidden>
+  <div class="view-head">
+    <span class="eyebrow">Safety</span>
+    <h2>Know who is actually at risk</h2>
+    <p>Medicines set most of the risk of a low during or after exercise. Learn the hypo steps, when high glucose matters, and how complications change the plan without banning exercise.</p>
+  </div>
+  <div class="bench">
+    <div class="panel">
+      <h3>The medication question</h3>
+      <p class="tiny">Always ask what the person actually takes. Select every medicine they use.</p>
+      <div class="chips" id="med-chips"></div>
+      <div class="ctl"><div class="ctl-top"><span class="lab">Risk of a low with exercise</span><span id="med-risk" class="pill"></span></div>
+        <div class="meter"><div id="med-meter"></div></div></div>
+      <div id="med-notes" class="stack"></div>
+    </div>
+    <div class="panel">
+      <h3>Treating a low (below 4.0 mmol/L)</h3>
+      <div class="steps" id="hypo-steps"></div>
+      <div class="row"><button class="btn" id="hypo-prev">Back</button><button class="btn primary" id="hypo-next">Next step</button><button class="btn" id="hypo-reset">Start again</button></div>
+      <p class="tiny">From the NDSS hypo guide. Follow the person's own diabetes action plan and local procedures.</p>
+    </div>
+  </div>
+  <div class="bench">
+    <div class="panel">
+      <h3>Before exercise with type 1 diabetes</h3>
+      <p class="tiny client-only">A guide to the questions your diabetes team may have already answered in your plan.</p>
+      <div class="ctl"><div class="ctl-top"><label for="t1-g">Glucose before exercise</label><output id="t1-g-out" class="num"></output></div>
+        <input type="range" id="t1-g" min="2.5" max="20" step="0.5" value="8"></div>
+      <div class="ctl" id="t1-k-wrap"><span class="lab">Blood ketones</span>
+        <div class="seg" role="group" aria-label="Blood ketones" id="t1-k">
+          <button data-k="0" aria-pressed="true">Below 0.6</button>
+          <button data-k="1" aria-pressed="false">0.6–1.4</button>
+          <button data-k="2" aria-pressed="false">1.5–2.9</button>
+          <button data-k="3" aria-pressed="false">3.0 or more</button>
+        </div></div>
+      <div class="ctl"><span class="lab">Planned exercise</span>
+        <div class="seg" role="group" aria-label="Exercise type" id="t1-x">
+          <button data-x="aer" aria-pressed="true">Aerobic</button>
+          <button data-x="ana" aria-pressed="false">HIIT or resistance</button>
+        </div></div>
+      <label class="switch"><input type="checkbox" id="t1-sev"> Severe hypo in the last 24 hours</label>
+      <div class="outcome" id="t1-out" aria-live="polite"></div>
+      <p class="tiny">Based on Riddell et al. 2017. Insulin and carbohydrate changes come from the person's diabetes team.</p>
+    </div>
+    <div class="panel">
+      <h3>Complications: modify, don't ban</h3>
+      <div class="stack" id="comp-list"></div>
+      <div class="callout rose"><strong>Ketoacidosis warning signs</strong><p>Nausea or vomiting, stomach pain, deep or laboured breathing, fruity breath, dehydration or confusion need urgent medical care. With an SGLT2 inhibitor this can happen even when glucose is close to normal.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES -->
+<section class="view" id="view-stories" data-view="stories" hidden>
+  <div class="view-head">
+    <span class="eyebrow">Stories</span>
+    <h2>Do not prescribe diabetes in isolation</h2>
+    <p>Three example people. Each one opens their day in the Glucose day view. Kevin is the workbook case; Priya and Sam are new examples.</p>
+  </div>
+  <div class="stack" id="stories"></div>
+</section>
+
+<!-- MY PLAN -->
+<section class="view" id="view-plan" data-view="plan" hidden>
+  <div class="view-head">
+    <span class="eyebrow">My plan</span>
+    <h2>Something consistently beats all or nothing</h2>
+    <p>Build a week that fits the life that actually exists. Plan a smaller back-up for the days that go wrong. The best program is one you can keep doing.</p>
+  </div>
+  <div class="bench">
+    <div class="panel">
+      <div class="week" id="week"></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="plan-goal">What matters most to me</label><textarea id="plan-goal" placeholder="e.g. Walk the dog without getting breathless"></textarea></div>
+      <div class="ctl"><label for="plan-mvs">My minimum session on a hard day</label><textarea id="plan-mvs" placeholder="e.g. 10-minute walk after dinner and 2 sets of sit-to-stands"></textarea></div>
+      <div class="stack" id="plan-check"></div>
+      <div class="row"><button class="btn primary" id="plan-copy">Copy my plan</button><span class="tiny" id="plan-copied" aria-live="polite"></span></div>
+      <textarea id="plan-text" readonly hidden></textarea>
+      <p class="tiny">Saved in this browser only. Nothing is sent anywhere.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="view" id="view-quiz" data-view="quiz" hidden>
+  <div class="view-head">
+    <span class="eyebrow">Check yourself</span>
+    <h2>Monday morning rules</h2>
+    <p>Eight questions built from the workbook. Pick an answer to see the reasoning.</p>
+  </div>
+  <div class="grid2" id="quiz"></div>
+  <div class="callout navy"><strong id="quiz-score">0 of 8 answered</strong><p>The ultimate goal: improve metabolic health, physical capacity and long-term health while helping the person build a safe, sustainable relationship with movement.</p></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>This is an education tool, not a diagnosis or a dosing guide. Curves are illustrative unless a source is named. Always follow the person's diabetes action plan and their diabetes team's advice.</p>
+    <details class="acc"><summary>Sources</summary><div id="sources"></div></details>
+  </div>
+</footer>
+
+<script>
+/* ===== utilities ===== */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+function S(tag,attrs,parent){const e=document.createElementNS(NS,tag);if(attrs)for(const k in attrs){if(k==='text')e.textContent=attrs[k];else e.setAttribute(k,attrs[k]);}if(parent)parent.appendChild(e);return e;}
+const store={get(k,d){try{const v=localStorage.getItem('pace-dm-'+k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem('pace-dm-'+k,JSON.stringify(v));}catch(e){}}};
+function segBind(sel,attr,cb){const host=$(sel);host.addEventListener('click',e=>{const b=e.target.closest('button['+attr+']');if(!b)return;$$('button['+attr+']',host).forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.getAttribute(attr));});}
+function segSet(sel,attr,val){$$('button['+attr+']',$(sel)).forEach(x=>x.setAttribute('aria-pressed',String(x.getAttribute(attr)===val)));}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TAG={strong:'<span class="tag strong">Strong</span>',moderate:'<span class="tag moderate">Moderate</span>',emerging:'<span class="tag">Emerging</span>',illus:'<span class="tag illus">Illustrative</span>'};
+const LAYER_NAME={healthy:'No diabetes',pre:'Prediabetes',t2:'Type 2',t1:'Type 1'};
+
+/* ===== mode + routing ===== */
+let mode=store.get('mode','team');
+function setMode(m){mode=m;document.body.classList.toggle('mode-team',m==='team');document.body.classList.toggle('mode-client',m==='client');segSet('#mode-seg','data-mode',m);store.set('mode',m);if(m==='client'&&location.hash==='#quiz')location.hash='#start';renderMapDetail();}
+segBind('#mode-seg','data-mode',setMode);
+const VIEWS=['start','body','day','exercise','safety','stories','plan','quiz'];
+let view='start';
+function route(){let v=(location.hash||'').slice(1);if(!VIEWS.includes(v))v='start';if(v==='quiz'&&mode==='client')v='start';view=v;
+  $$('[data-view]').forEach(s=>s.hidden=s.dataset.view!==v);
+  $$('.nav a').forEach(a=>{if(a.getAttribute('href')==='#'+v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  if(v==='day')renderDay(); if(v==='exercise')renderLens(); window.scrollTo(0,0);}
+window.addEventListener('hashchange',route);
+
+/* ===== start: myths ===== */
+const MYTHS=[
+ {q:'Exercise always makes glucose fall.',v:'Not quite',a:'Moderate aerobic work usually lowers it. Sprints, HIIT and heavy lifting can raise it for a while, because adrenaline tells the liver to release glucose. It usually comes back down.'},
+ {q:'No insulin means glucose cannot get into cells.',v:'Too simple',a:'Contracting muscle opens its own glucose doors (GLUT4) without insulin. That is why movement lowers glucose even when insulin is low or not working well.'},
+ {q:'Everyone with type 2 diabetes is at risk of a low when they exercise.',v:'Depends on medicines',a:'The risk sits mainly with insulin and sulfonylureas. Metformin, GLP-1 medicines and SGLT2 inhibitors rarely cause lows on their own.'},
+ {q:'People with type 2 diabetes brought it on themselves.',v:'Myth',a:'Genes, age, ethnicity, sleep, stress, income and environment all shape risk. Four in five adults with diabetes experience stigma, and blame makes self-care harder.'},
+ {q:'If one session helps for 48 hours, exercising every second day covers it.',v:'Partly',a:'Insulin sensitivity stays higher for up to 24–48 hours, then fades. Regular movement matters more than treating 48 hours as an on-off switch.'},
+ {q:'High glucose always means do not exercise.',v:'Depends',a:'High glucose alone is often fine. High glucose with ketones or missing insulin is the reason to stop. Check the person\'s plan.'},
+ {q:'Prediabetes is just a warning; nothing can be done yet.',v:'Myth',a:'This is the stage where change works best. In the Diabetes Prevention Program, lifestyle change cut new cases of type 2 diabetes by 58% over about 3 years.'},
+ {q:'Only formal workouts count.',v:'Myth',a:'Breaking up sitting every 30 minutes and short walks after meals lower glucose spikes. The other 23 hours matter too.'}
+];
+function buildMyths(){const host=$('#myths');host.innerHTML=MYTHS.map((m,i)=>`<button class="myth" aria-expanded="false" data-i="${i}"><span class="q">“${esc(m.q)}”</span><span class="hint">Myth or fact? Tap to see</span><span class="a"><span class="verdict" style="color:var(--teal)">${esc(m.v.toUpperCase())}</span><br>${esc(m.a)}</span></button>`).join('');
+  host.addEventListener('click',e=>{const b=e.target.closest('.myth');if(b)b.setAttribute('aria-expanded',String(b.getAttribute('aria-expanded')!=='true'));});}
+
+/* ===== body map ===== */
+let layer=store.get('layer','t2'), mapEx=false, selNode='muscle', mapView=store.get('mapView','body'), t1Ins='ok', ketT=0, ketV=.3;
+const t1Low=()=>layer==='t1'&&t1Ins==='low';
+const NODES={
+ pancreas:{x:320,y:66,w:170,label:'Pancreas',sub:'Insulin and glucagon'},
+ liver:{x:112,y:150,w:170,label:'Liver',sub:'Stores and releases glucose'},
+ gut:{x:528,y:150,w:170,label:'Gut',sub:'Absorbs food, sends GLP-1'},
+ muscle:{x:96,y:285,w:170,label:'Muscle',sub:'Biggest glucose store'},
+ brain:{x:544,y:285,w:170,label:'Brain',sub:'Stress, appetite, mood'},
+ fat:{x:112,y:420,w:170,label:'Fat tissue',sub:'Stores spare energy'},
+ kidney:{x:528,y:420,w:170,label:'Kidney',sub:'Filters glucose'},
+ vessels:{x:320,y:495,w:200,label:'Vessels, nerves, eyes',sub:'Where high glucose harms'}
+};
+const HUB={x:320,y:285,r:64};
+const STATE={
+ pancreas:{healthy:'ok',pre:'strain',t2:'strain',t1:'broken'},
+ liver:{healthy:'ok',pre:'strain',t2:'strain',t1:'strain'},
+ gut:{healthy:'ok',pre:'ok',t2:'strain',t1:'ok'},
+ muscle:{healthy:'ok',pre:'strain',t2:'strain',t1:'ok'},
+ brain:{healthy:'ok',pre:'ok',t2:'strain',t1:'strain'},
+ fat:{healthy:'ok',pre:'strain',t2:'strain',t1:'ok'},
+ kidney:{healthy:'ok',pre:'ok',t2:'strain',t1:'strain'},
+ vessels:{healthy:'ok',pre:'strain',t2:'strain',t1:'strain'}
+};
+const INFO={
+ pancreas:{t1low:'No insulin is being made, and not enough is being taken. Nothing is holding back fat breakdown.',role:'Beta cells release insulin when glucose rises. Alpha cells release glucagon when it falls.',tag:'strong',
+  healthy:'Insulin rises after meals and falls between them. Glucagon keeps glucose up overnight and during exercise.',
+  pre:'Beta cells work harder to keep glucose near normal, so insulin levels run high.',
+  t2:'Beta cells tire over the years and release less insulin. Glucagon is not switched off properly after meals.',
+  t1:'The immune system has destroyed the beta cells, so there is little or no insulin. Insulin comes from injections or a pump. Over the years the glucagon response to a low also weakens.',
+  ex:'Exercise lowers the insulin the body needs, because working muscle takes in glucose on its own. Glucagon rises to help the liver supply fuel.',
+  team:'Exercise lowers insulin secretion and raises glucagon and catecholamines, so the liver matches glucose output to muscle uptake. Injected insulin cannot fall like this, which is why insulin users go low.'},
+ liver:{t1low:'Without enough insulin the liver keeps releasing glucose and turns a flood of fatty acids into ketones. Ketones are acids, so the blood slowly becomes acidic.',role:'Stores glucose after meals and releases it between meals and overnight.',tag:'strong',
+  healthy:'Insulin tells the liver to store glucose after a meal. Between meals it releases just enough.',
+  pre:'Fat starts to build up in the liver. It responds less to insulin, so fasting glucose creeps up.',
+  t2:'A fatty liver ignores insulin and keeps releasing glucose, which pushes up fasting and overnight glucose.',
+  t1:'Without enough insulin the liver keeps releasing glucose and also makes ketones. That is why glucose and ketones rise together.',
+  ex:'During exercise the liver releases glucose to match what muscles use. Regular training lowers liver fat and improves the liver\'s response to insulin.',
+  team:'Hepatic insulin resistance drives fasting hyperglycaemia. Insulin deficiency raises both hepatic glucose output and ketogenesis. Liver fat falls with training and with weight loss.'},
+ gut:{t1low:'Nausea, vomiting and stomach pain are warning signs of ketoacidosis.',role:'Absorbs glucose from food and releases GLP-1 and GIP, which tell the pancreas a meal is coming.',tag:'strong',
+  healthy:'Glucose from a meal enters the blood over 1–2 hours. Gut hormones boost insulin and slow the stomach.',
+  pre:'Usually working normally.',
+  t2:'The gut hormone signal is weaker. GLP-1 medicines such as semaglutide replace and strengthen it.',
+  t1:'Usually working normally. Meal insulin has to be matched to the food.',
+  ex:'A walk soon after eating blunts the rise in glucose from that meal.',
+  team:'The incretin effect is reduced in T2D. GLP-1 RAs and tirzepatide raise glucose-dependent insulin release, lower glucagon, slow gastric emptying and reduce appetite.'},
+ muscle:{t1low:'Without insulin, muscle takes in little glucose and burns fat and ketones instead.',role:'The biggest store for glucose after meals. Contracting muscle burns glucose and fat.',tag:'strong',
+  healthy:'Insulin opens glucose doors (GLUT4) and muscle soaks up glucose after meals.',
+  pre:'Muscle starts to resist insulin. Fewer doors open, so more glucose stays in the blood.',
+  t2:'Insulin resistance plus fat stored inside muscle. The same insulin opens far fewer doors.',
+  t1:'Muscle works normally but depends on injected insulin, so timing and dose matter.',
+  ex:'Contraction opens glucose doors without insulin. Training adds mitochondria, doors, capillaries and muscle mass, so the store gets bigger.',
+  team:'Contraction-mediated GLUT4 translocation (AMPK and other pathways) is additive to insulin. Post-exercise insulin sensitivity stays raised for up to about 48 h while glycogen refills.'},
+ brain:{t1low:'The brain can burn ketones as a backup fuel. As acid builds, confusion and drowsiness can follow.',role:'Controls appetite, mood and stress hormones. Stress hormones raise glucose.',tag:'moderate',
+  healthy:'Stress hormones raise glucose briefly when needed, then settle.',
+  pre:'Short sleep and ongoing stress both raise glucose and insulin resistance.',
+  t2:'Diabetes distress affects about 1 in 3 people with type 2. Stigma and low mood make self-care harder. Diabetes is also a risk factor for dementia.',
+  t1:'Fear of lows is the most common barrier to exercise in type 1 diabetes.',
+  ex:'Exercise lifts mood and sleep. Very hard efforts release adrenaline, which can raise glucose for a while.',
+  team:'Diabetes distress 36% in T2D (Perrin 2017). Fear of hypoglycaemia is the strongest barrier in T1D (Brazeau 2008). Diabetes is one of the 14 Lancet Commission dementia risk factors.'},
+ fat:{t1low:'Without insulin, fat breaks down fast and releases fatty acids into the blood: the raw material for ketones.',role:'Stores spare energy safely and releases fatty acids for fuel.',tag:'moderate',
+  healthy:'Fat cells store energy after meals and release it between meals.',
+  pre:'When fat stores overflow, fat spills into the liver and muscle.',
+  t2:'Visceral fat releases fatty acids and inflammatory signals that worsen insulin resistance in liver and muscle.',
+  t1:'Usually working normally.',
+  ex:'Regular training lowers visceral and liver fat, even before the scales move.',
+  team:'Ectopic lipid in liver and muscle impairs insulin signalling. Visceral fat reduction needs a moderately high training volume (about 500 kcal, 4–5 days a week; ACSM 2022).'},
+ kidney:{t1low:'Glucose and ketones spill into the urine and take water with them, causing thirst, passing lots of urine and dehydration.',role:'Filters blood and takes glucose back into the body.',tag:'strong',
+  healthy:'All filtered glucose is taken back.',
+  pre:'Usually working normally.',
+  t2:'When glucose runs high it spills into the urine. Years of high glucose and blood pressure can damage the kidney.',
+  t1:'Same as type 2. Kidney disease is a key long-term complication.',
+  ex:'Lower blood pressure and glucose protect the kidney over time.',
+  team:'SGLT2 inhibitors block glucose reabsorption, which lowers glucose and protects heart and kidney. They bring a risk of ketoacidosis with near-normal glucose.'},
+ vessels:{t1low:'Dehydration and acid strain the heart and circulation. Deep, fast breathing is the body trying to blow off acid.',role:'Carry fuel and oxygen. Nerves sense and control; eyes see.',tag:'strong',
+  healthy:'Working normally.',
+  pre:'Risk of heart disease is already a little higher.',
+  t2:'Years of high glucose damage small and large vessels. Coronary heart disease risk is about twice as high, and ischaemic stroke 2.3 times.',
+  t1:'Same long-term risks. Neuropathy and retinopathy shape which exercise is safe.',
+  ex:'Exercise lowers blood pressure for hours after a session. Training improves heart and vessel function and fitness.',
+  team:'ERFC 2010: HR 2.00 for CHD and 2.27 for ischaemic stroke. Complications modify the exercise plan rather than banning it.'}
+};
+const FLOWS=[ // from,to,kind,rates per layer, exercise multiplier
+ {f:'gut',t:'hub',k:'glu',r:{healthy:.7,pre:.7,t2:.8,t1:.7},ex:1},
+ {f:'liver',t:'hub',k:'glu',r:{healthy:.6,pre:.8,t2:1.2,t1:1.0},ex:1.6},
+ {f:'hub',t:'muscle',k:'glu',r:{healthy:1.0,pre:.6,t2:.35,t1:.7},ex:2.6},
+ {f:'hub',t:'fat',k:'glu',r:{healthy:.4,pre:.35,t2:.3,t1:.3},ex:.8},
+ {f:'hub',t:'kidney',k:'glu',r:{healthy:0,pre:0,t2:.35,t1:.35},ex:.6},
+ {f:'pancreas',t:'hub',k:'ins',r:{healthy:.8,pre:1.4,t2:.6,t1:0},ex:.5},
+ {f:'brain',t:'hub',k:'gcg',r:{healthy:.15,pre:.25,t2:.35,t1:.35},ex:1.5},
+ {f:'hub',t:'vessels',k:'dmg',r:{healthy:0,pre:.15,t2:.45,t1:.35},ex:.7},
+ {f:'hub',t:'liver',k:'glu',r:{healthy:0,pre:0,t2:0,t1:0},ex:1},{f:'pancreas',t:'hub',k:'gcg',r:{healthy:0,pre:0,t2:0,t1:0},ex:1},
+ {f:'fat',t:'hub',k:'ffa',ket:1},{f:'hub',t:'liver',k:'ffa',ket:1},{f:'liver',t:'hub',k:'ket',ket:1},
+ {f:'hub',t:'brain',k:'ket',ket:1},{f:'hub',t:'muscle',k:'ket',ket:1},{f:'hub',t:'kidney',k:'ket',ket:1}
+];
+function rateOf(fl){const low=t1Low(),ie=insOut()*SENS[layer],gc=gcgOut(),hi=clamp((G-6)/4,0,1.5),ex=mapEx;
+  if(fl.ket){if(layer!=='t1')return 0;const r=fl.k==='ffa'?(low?1.0:.12):fl.t==='kidney'?(low?.6:0):(low?1.3:.18);return r*(ex&&!low?1.6:1);}
+  const key=fl.f+'>'+fl.t+':'+fl.k;
+  switch(key){
+   case 'gut>hub:glu':return .45;
+   case 'liver>hub:glu':{if(low)return 1.7;let r=.5;if(G<4.6)r=.5+1.8*gc;else{const supp={healthy:.95,pre:.6,t2:.12,t1:.5}[layer]*clamp(hi*1.4,0,1);r=.5*(1-supp);}return r*(ex?1.6:1);}
+   case 'hub>liver:glu':return low?0:hi*ie*{healthy:.9,pre:.6,t2:.25,t1:.8}[layer];
+   case 'hub>muscle:glu':return .12+.85*ie*clamp((G-3)/4,0,1.6)+(ex?1.3:0);
+   case 'hub>fat:glu':return .08+.45*ie*hi;
+   case 'hub>kidney:glu':return G>10?(G-10)/4:0;
+   case 'pancreas>hub:ins':return layer==='t1'?0:insOut()*.75;
+   case 'pancreas>hub:gcg':return gc*.9;
+   case 'brain>hub:gcg':return fl.r[layer];
+   case 'hub>vessels:dmg':return G>8?fl.r[layer]+(G-8)/8:fl.r[layer]*.5;
+  }
+  return fl.r[layer]*(ex?fl.ex:1);}
+const T1LOW_ST={liver:'broken',fat:'strain',muscle:'strain',kidney:'strain',brain:'strain',pancreas:'broken',vessels:'strain',gut:'strain'};
+const stOf=k=>t1Low()?T1LOW_ST[k]:STATE[k][layer];
+const PCOL={glu:'--glu',ins:'--ins',gcg:'--gcg',dmg:'--rose',ffa:'--ffa',ket:'--ket'};
+function boxEdge(n,tx,ty){const w=n.w/2,h=28;const dx=tx-n.x,dy=ty-n.y;const s=Math.min(w/Math.abs(dx||1e-6),h/Math.abs(dy||1e-6));return [n.x+dx*s,n.y+dy*s];}
+function endPts(fl){const a=fl.f==='hub'?HUB:NODES[fl.f], b=fl.t==='hub'?HUB:NODES[fl.t];
+  const pa=fl.f==='hub'?circEdge(b.x,b.y):boxEdge(a,HUB.x,HUB.y), pb=fl.t==='hub'?circEdge(a.x,a.y):boxEdge(b,HUB.x,HUB.y);return [pa,pb];}
+function circEdge(tx,ty){const dx=tx-HUB.x,dy=ty-HUB.y,d=Math.hypot(dx,dy);return [HUB.x+dx/d*HUB.r,HUB.y+dy/d*HUB.r];}
+let mapParticles=[], mapG=null;
+function buildMap(){const svg=$('#map-svg');svg.innerHTML='';
+  const links=S('g',{},svg);
+  FLOWS.forEach(fl=>{const [a,b]=endPts(fl);fl.a=a;fl.b=b;fl.line=S('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],'stroke-width':fl.k==='dmg'?2:1.5,style:'stroke:var(--line)'},links);fl.acc=0;});
+  mapG=S('g',{},svg);
+  // hub
+  const hub=S('g',{},svg);
+  S('circle',{cx:HUB.x,cy:HUB.y,r:HUB.r,id:'hub-ring','stroke-width':3,style:'fill:var(--surface);stroke:var(--teal)'},hub);
+  S('text',{x:HUB.x,y:HUB.y-14,'text-anchor':'middle','font-size':15,'font-weight':700,style:'fill:var(--head);font-family:var(--f-display)',text:'Blood glucose'},hub);
+  S('text',{x:HUB.x,y:HUB.y+8,'text-anchor':'middle','font-size':14,id:'hub-val',style:'fill:var(--fg);font-family:var(--f-mono)'},hub);
+  S('text',{x:HUB.x,y:HUB.y+26,'text-anchor':'middle','font-size':11.5,id:'hub-sub',style:'fill:var(--muted)'},hub);
+  for(const k in NODES){const n=NODES[k];const g=S('g',{class:'node',tabindex:0,role:'button','aria-label':n.label,'data-node':k},svg);
+    S('rect',{x:n.x-n.w/2,y:n.y-28,width:n.w,height:56,rx:9,'stroke-width':1.25,class:'state-ok',style:'stroke:var(--line)'},g);
+    S('text',{x:n.x,y:n.y-5,'text-anchor':'middle','font-size':15,'font-weight':700,style:'fill:var(--head)',text:n.label},g);
+    S('text',{x:n.x,y:n.y+14,'text-anchor':'middle','font-size':12,style:'fill:var(--muted)',text:n.sub},g);
+    n.g=g;}
+  // exercise badge near muscle
+  const eb=S('g',{id:'ex-badge'},svg);
+  S('rect',{x:16,y:330,width:110,height:26,rx:13,style:'fill:var(--teal)'},eb);
+  S('text',{x:71,y:347,'text-anchor':'middle','font-size':12.5,'font-weight':700,style:'fill:#fff',text:'Contracting'},eb);
+  S('text',{x:320,y:535,'text-anchor':'middle','font-size':11.5,id:'t1-ins-note',style:'fill:var(--muted)',text:''},svg);
+  svg.addEventListener('click',e=>{const g=e.target.closest('[data-node]');if(g){selNode=g.dataset.node;renderMap();}});
+  svg.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.node){e.preventDefault();selNode=e.target.dataset.node;renderMap();}});
+}
+const HUBTXT={t1low:['High glucose','plus rising ketones'],healthy:['4.0–7.8 mmol/L','steady'],pre:['Fasting 6.1–6.9','or HbA1c 6.0–6.4%'],t2:['Fasting ≥7.0','or HbA1c ≥6.5%'],t1:['Swings with insulin','food and activity']};
+function renderMap(){segSet('#mapview-seg','data-mv',mapView);$('#bodyfig-host').hidden=mapView!=='body';$('#map-host').hidden=mapView!=='organ';store.set('mapView',mapView);
+  $('#t1ins-wrap').hidden=layer!=='t1';segSet('#t1ins-seg','data-ti',t1Ins);$$('.ket-leg').forEach(e=>e.hidden=layer!=='t1');
+  for(const k in NODES){const n=NODES[k],st=stOf(k);const r=n.g.querySelector('rect');r.setAttribute('class','state-'+st);r.style.stroke=st==='ok'?'var(--line)':st==='strain'?'var(--orange)':'var(--rose)';n.g.classList.toggle('sel',k===selNode);}
+  const ring=$('#hub-ring');ring.style.stroke=t1Low()?'var(--ket)':layer==='healthy'?'var(--teal)':layer==='pre'?'var(--orange)':'var(--rose)';
+  const hk=t1Low()?'t1low':layer;$('#hub-val').textContent=mapEx&&layer!=='t1'?'Falling':HUBTXT[hk][0];$('#hub-sub').textContent=t1Low()?HUBTXT.t1low[1]:mapEx?(layer==='t1'?'can fall fast with insulin':'muscle is pulling it in'):HUBTXT[layer][1];
+  $('#ex-badge').style.display=mapEx?'':'none';
+  $('#t1-ins-note').textContent=layer==='t1'?'In type 1, insulin comes from injections or a pump, not the pancreas.':'';
+  FLOWS.forEach(fl=>{const r=rateOf(fl);fl.rate=r;if(fl.ket&&!r){fl.line.style.opacity=0;return;}fl.line.style.stroke=r>0?(fl.k==='dmg'?'var(--rose)':fl.k==='ket'?'var(--ket)':'var(--line)'):'var(--line)';fl.line.style.strokeDasharray=fl.k==='dmg'?'5 5':'';fl.line.style.opacity=r>0?1:.35;});
+  segSet('#layer-seg','data-layer',layer);store.set('layer',layer);renderMapDetail();syncZoom();renderBodyFig();renderKet();chainKey='';}
+function renderMapDetail(){const host=$('#map-detail');if(!host)return;const i=INFO[selNode],n=NODES[selNode],st=stOf(selNode),lt=t1Low()?i.t1low:i[layer];
+  const stTxt={ok:['Working well','ok'],strain:['Under strain','warn'],broken:['Not working','bad']}[st];
+  host.innerHTML=`<span class="eyebrow">${esc(LAYER_NAME[layer])}</span><h3>${esc(n.label)} <span class="pill ${stTxt[1]}">${stTxt[0]}</span></h3>
+  <p>${esc(i.role)}</p>
+  <div class="callout ${st==='ok'?'':st==='strain'?'orange':'rose'}"><strong>${layer==='healthy'?'When all is well':t1Low()?'Without enough insulin':'What changes'}</strong><p>${esc(lt)}</p></div>
+  <div class="callout"><strong>What exercise changes</strong><p>${esc(i.ex)}</p></div>
+  <p class="team-only tiny">${esc(i.team)} ${TAG[i.tag]}</p>
+  <p class="tiny">Tap another organ, or switch the layer above.</p>`;}
+function stepMap(dt){FLOWS.forEach(fl=>{if(!fl.rate||!fl.a)return;fl.acc+=fl.rate*dt*2.2;while(fl.acc>=1){fl.acc-=1;const c=S('circle',{r:fl.k==='ins'?3.2:fl.k==='dmg'?3:3.6,style:'fill:var('+PCOL[fl.k]+')'},mapG);mapParticles.push({fl,t:0,c,sp:.45+Math.random()*.2,off:(Math.random()-.5)*8});}});
+  mapParticles=mapParticles.filter(p=>{p.t+=dt*p.sp;if(p.t>=1){p.c.remove();return false;}const a=p.fl.a,b=p.fl.b;const dx=b[0]-a[0],dy=b[1]-a[1],d=Math.hypot(dx,dy)||1;
+    p.c.setAttribute('cx',a[0]+dx*p.t-dy/d*p.off);p.c.setAttribute('cy',a[1]+dy*p.t+dx/d*p.off);p.c.setAttribute('opacity',p.t<.1?p.t*10:p.t>.9?(1-p.t)*10:1);return true;});}
+segBind('#layer-seg','data-layer',v=>{layer=v;if(v!=='t1'){t1Ins='ok';ketT=0;ketV=.3;}else{cell.ins=t1Ins==='ok';$('#cell-ins').checked=cell.ins;}renderMap();});
+segBind('#mapview-seg','data-mv',v=>{mapView=v;renderMap();});
+segBind('#t1ins-seg','data-ti',v=>{t1Ins=v;if(v==='ok'){ketT=0;}cell.ins=v==='ok';$('#cell-ins').checked=cell.ins;renderMap();});
+$('#map-ex').addEventListener('change',e=>{mapEx=e.target.checked;$('#cell-con').checked=mapEx;cell.con=mapEx;renderMap();});
+
+
+/* ===== body figure view ===== */
+const FX=(x,y)=>[60+.85*x,8+.85*y], BX=(x,y)=>[360+.85*x,8+.85*y];
+function figOutline(){const limbs=[['M142 142 Q116 200 108 254 Q100 310 96 362',28],['M258 142 Q284 200 292 254 Q300 310 304 362',28],['M168 336 Q160 410 162 470 Q164 540 162 604',40],['M232 336 Q240 410 238 470 Q236 540 238 604',40]];
+  const torso='M140 132 C160 122 240 122 260 132 C276 140 280 160 276 190 L262 290 C258 312 262 332 266 352 L134 352 C138 332 142 312 138 290 L124 190 C120 160 124 140 140 132 Z';
+  const solids=f=>`<circle cx="200" cy="64" r="36" style="fill:var(${f})"/><rect x="188" y="94" width="24" height="34" rx="10" style="fill:var(${f})"/><path d="${torso}" style="fill:var(${f})"/><circle cx="95" cy="378" r="15" style="fill:var(${f})"/><circle cx="305" cy="378" r="15" style="fill:var(${f})"/><ellipse cx="154" cy="622" rx="22" ry="11" style="fill:var(${f})"/><ellipse cx="246" cy="622" rx="22" ry="11" style="fill:var(${f})"/>`;
+  const out=limbs.map(([d,w])=>`<path d="${d}" fill="none" stroke-linecap="round" stroke-width="${w+4}" style="stroke:var(--body-line)"/>`).join('');
+  const inn=limbs.map(([d,w])=>`<path d="${d}" fill="none" stroke-linecap="round" stroke-width="${w}" style="stroke:var(--body)"/>`).join('');
+  return `<g style="stroke:var(--body-line);stroke-width:4">${solids('--body-line')}</g>${out}<g transform="translate(0 0)">${solids('--body')}</g>${inn}`;}
+const BPARTS={F:[
+  ['brain','brain',`<ellipse cx="200" cy="46" rx="25" ry="14" style="fill:var(--brainc)"/>`],
+  ['eyes','vessels',`<circle cx="187" cy="68" r="4.5" style="fill:var(--head)"/><circle cx="213" cy="68" r="4.5" style="fill:var(--head)"/>`],
+  ['fat','fat',`<ellipse cx="200" cy="284" rx="54" ry="33" style="fill:var(--fat);opacity:.55"/>`],
+  ['chest','muscle',`<path d="M150 150 Q172 143 197 150 L197 188 Q172 197 152 184 Z" style="fill:var(--musc)"/><path d="M250 150 Q228 143 203 150 L203 188 Q228 197 248 184 Z" style="fill:var(--musc)"/>`],
+  ['biceps','muscle',`<ellipse cx="121" cy="199" rx="10" ry="30" transform="rotate(17 121 199)" style="fill:var(--musc)"/><ellipse cx="279" cy="199" rx="10" ry="30" transform="rotate(-17 279 199)" style="fill:var(--musc)"/>`],
+  ['quads','muscle',`<ellipse cx="164" cy="402" rx="15" ry="48" style="fill:var(--musc)"/><ellipse cx="236" cy="402" rx="15" ry="48" style="fill:var(--musc)"/>`],
+  ['liver','liver',`<path d="M146 202 Q178 193 206 204 Q200 229 168 239 Q150 232 146 202 Z" style="fill:var(--liver)"/>`],
+  ['gut','gut',`<ellipse cx="225" cy="212" rx="17" ry="12" style="fill:var(--gutc)"/><rect x="170" y="258" width="60" height="46" rx="16" style="fill:var(--gutc)"/><path d="M180 270 q10 -8 20 0 t20 0 M180 284 q10 -8 20 0 t20 0" fill="none"/>`],
+  ['pancreas','pancreas',`<path d="M174 238 Q205 228 240 224 Q243 233 234 236 Q205 242 176 248 Z" style="fill:var(--panc)"/>`]
+ ],B:[
+  ['lats','muscle',`<path d="M146 168 Q150 232 174 286 L198 272 L198 182 Q172 166 146 168 Z" style="fill:var(--musc)"/><path d="M254 168 Q250 232 226 286 L202 272 L202 182 Q228 166 254 168 Z" style="fill:var(--musc)"/>`],
+  ['triceps','muscle',`<ellipse cx="121" cy="199" rx="10" ry="30" transform="rotate(17 121 199)" style="fill:var(--musc)"/><ellipse cx="279" cy="199" rx="10" ry="30" transform="rotate(-17 279 199)" style="fill:var(--musc)"/>`],
+  ['glutes','muscle',`<ellipse cx="176" cy="342" rx="25" ry="21" style="fill:var(--musc)"/><ellipse cx="224" cy="342" rx="25" ry="21" style="fill:var(--musc)"/>`],
+  ['kidneys','kidney',`<ellipse cx="178" cy="248" rx="10" ry="17" style="fill:var(--kid)"/><ellipse cx="222" cy="248" rx="10" ry="17" style="fill:var(--kid)"/>`]
+ ]};
+const BLABELS=[ // [text, node, side, labelY, figure, point]
+ ['Eyes','vessels','L',66,'F',[188,68]],['Chest','muscle','L',150,'F',[165,170]],['Biceps','muscle','L',184,'F',[121,199]],['Liver','liver','L',216,'F',[160,215]],['Fat tissue','fat','L',262,'F',[160,292]],['Quads','muscle','L',352,'F',[164,402]],
+ ['Brain','brain','R',46,'F',[214,44]],['Pancreas','pancreas','R',205,'F',[232,233]],['Gut','gut','R',268,'F',[226,282]],
+ ['Triceps','muscle','BL',160,'B',[121,199]],['Lats','muscle','BL',238,'B',[160,235]],
+ ['Kidneys','kidney','BR',222,'B',[222,248]],['Glutes','muscle','BR',300,'B',[224,342]]];
+let bodyParticles=[], bodyFlows=[], bodyG={};
+function FL(f,t,k){return FLOWS.find(x=>x.f===f&&x.t===t&&x.k===k);}
+function buildBodyFig(){const svg=$('#bodyfig-svg');
+  const figs=['F','B'].map(g=>`<g transform="translate(${g==='F'?60:360} 8) scale(.85)" id="fig-${g}">${figOutline()}
+    ${g==='F'?'<line x1="200" y1="132" x2="200" y2="336" stroke-width="5" stroke-linecap="round" style="stroke:var(--rose);opacity:.35"/>':'<line x1="200" y1="120" x2="200" y2="332" stroke-width="3" stroke-dasharray="4 5" style="stroke:var(--body-line)"/>'}
+    ${BPARTS[g].map(([id,node,sh])=>`<g class="bpart" data-part="${id}" data-node="${node}" tabindex="0" role="button" aria-label="${id}">${sh}</g>`).join('')}
+    <g class="bparts-p"></g></g>`).join('');
+  const labs=BLABELS.map(([t,node,side,ly,fig,pt])=>{const [px,py]=(fig==='F'?FX:BX)(...pt);const x=side==='L'?124:side==='R'?330:side==='BL'?436:636;const anchor=side==='L'||side==='BL'?'end':'start';const lx=anchor==='end'?x+4:x-4;
+    return `<g class="blab" data-node="${node}" role="button" tabindex="0" aria-label="${t}"><line x1="${lx}" y1="${ly-4}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}"/><circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="2.5" style="fill:var(--muted)"/><text x="${x}" y="${ly}" text-anchor="${anchor}">${t}</text></g>`;}).join('');
+  svg.innerHTML=figs+labs+`<text x="230" y="590" text-anchor="middle" font-size="12" style="fill:var(--muted);font-family:var(--f-mono);letter-spacing:.08em">FRONT</text><text x="530" y="590" text-anchor="middle" font-size="12" style="fill:var(--muted);font-family:var(--f-mono);letter-spacing:.08em">BACK</text>
+   <text x="380" y="22" text-anchor="middle" font-size="13" font-weight="700" id="bf-status" style="fill:var(--head)"></text>`;
+  bodyG={F:svg.querySelector('#fig-F .bparts-p'),B:svg.querySelector('#fig-B .bparts-p')};
+  const mk=(fl,g,a,list,s=1)=>list.forEach(b=>bodyFlows.push({fl,g,a,b,acc:Math.random(),s}));
+  bodyFlows=[];
+  mk(FL('gut','hub','glu'),'F',[212,272],[[202,190]]);
+  mk(FL('liver','hub','glu'),'F',[172,214],[[202,200]]);
+  mk(FL('hub','liver','glu'),'F',[202,222],[[176,220]]);
+  mk(FL('pancreas','hub','gcg'),'F',[220,236],[[182,226]]);
+  mk(FL('pancreas','hub','ins'),'F',[222,232],[[202,180]]);
+  const mus=FL('hub','muscle','glu');
+  mk(mus,'F',[200,158],[[172,168],[228,168]],.5);mk(mus,'F',[200,150],[[121,199],[279,199]],.5);mk(mus,'F',[200,330],[[164,400],[236,400]],.5);
+  mk(mus,'B',[200,190],[[168,228],[232,228]],.5);mk(mus,'B',[200,160],[[121,199],[279,199]],.5);mk(mus,'B',[200,300],[[176,340],[224,340]],.5);
+  mk(FL('hub','kidney','glu'),'B',[200,236],[[180,250],[220,250]],.6);
+  mk(FL('fat','hub','ffa'),'F',[186,290],[[170,228]]);mk(FL('fat','hub','ffa'),'F',[214,290],[[176,226]]);
+  mk(FL('liver','hub','ket'),'F',[176,224],[[202,214]]);
+  mk(FL('hub','brain','ket'),'F',[200,140],[[200,52]]);
+  const mk2=FL('hub','muscle','ket');mk(mk2,'F',[200,160],[[172,170],[228,170]],.5);mk(mk2,'F',[200,330],[[164,400],[236,400]],.5);mk(mk2,'B',[200,190],[[168,228],[232,228]],.5);
+  mk(FL('hub','kidney','ket'),'B',[200,236],[[180,252],[220,252]],.6);
+  svg.addEventListener('click',e=>{const g=e.target.closest('[data-node]');if(g){selNode=g.dataset.node;renderMap();}});
+  svg.addEventListener('keydown',e=>{const n=e.target.dataset&&e.target.dataset.node;if((e.key==='Enter'||e.key===' ')&&n){e.preventDefault();selNode=n;renderMap();}});}
+function renderBodyFig(){const svg=$('#bodyfig-svg');if(!svg||!bodyG.F)return;
+  $$('.bpart',svg).forEach(p=>{const st=stOf(p.dataset.node);p.classList.toggle('st-strain',st==='strain');p.classList.toggle('st-broken',st==='broken');p.classList.toggle('sel',p.dataset.node===selNode);});
+  if(!mapEx)$$('#bodyfig-svg .bpart[data-node="muscle"] > *').forEach(e=>e.style.opacity='');
+  $$('.blab',svg).forEach(l=>l.classList.toggle('sel',l.dataset.node===selNode));
+  const hk=t1Low()?'t1low':layer;$('#bf-status').textContent='Blood glucose: '+(mapEx&&layer!=='t1'?'falling as muscle pulls it in':HUBTXT[hk][0]+', '+HUBTXT[hk][1]);}
+function stepBody(dt){bodyFlows.forEach(bf=>{const r=bf.fl&&bf.fl.rate;if(!r)return;bf.acc+=r*bf.s*dt*1.6;while(bf.acc>=1){bf.acc-=1;const k=bf.fl.k;const c=S('circle',{r:k==='ins'?2.8:3.4,style:'fill:var('+PCOL[k]+')'},bodyG[bf.g]);bodyParticles.push({bf,t:0,c,sp:.7+Math.random()*.3});}});
+  bodyParticles=bodyParticles.filter(p=>{p.t+=dt*p.sp;if(p.t>=1){p.c.remove();return false;}const a=p.bf.a,b=p.bf.b;p.c.setAttribute('cx',lerp(a[0],b[0],p.t));p.c.setAttribute('cy',lerp(a[1],b[1],p.t));p.c.setAttribute('opacity',p.t<.12?p.t*8:p.t>.85?(1-p.t)*6.6:1);return true;});
+  if(mapEx){const o=.75+.25*Math.sin(performance.now()/180);$$('#bodyfig-svg .bpart[data-node="muscle"] > *').forEach(e=>e.style.opacity=o);}}
+
+/* ===== ketones panel ===== */
+const KSTAGE=[[.6,'Normal','ok','Ketones are low. Light to moderate exercise is fine; keep checking glucose.'],[1.5,'Rising','warn','Light exercise only, under 30 minutes, and check the diabetes plan first (Riddell 2017).'],[3,'High','bad','Do not exercise. Follow the sick-day plan and contact the diabetes team.'],[99,'Ketoacidosis risk','bad','Blood ketones of 3.0 or more need urgent medical care.']];
+function renderKet(){const host=$('#ket-panel');if(!host)return;host.hidden=layer!=='t1';if(layer!=='t1')return;const low=t1Low();
+  host.innerHTML=`<span class="eyebrow">Type 1 · ketones</span><h3>Ketones: the backup fuel</h3>
+  <p style="font-size:14.5px">When glucose cannot get into cells, the body burns fat instead. The liver turns fatty acids into ketones, which muscle, heart and brain can use as fuel. With enough insulin, this stays a small, useful trickle.</p>
+  <div class="ctl"><div class="ctl-top"><span class="lab">Blood ketones</span><span><b class="num" id="ket-val"></b> <span class="pill" id="ket-pill"></span></span></div>
+   <div class="ketbar"><i id="ket-mark"></i></div><div class="ketscale"><span style="position:absolute;left:0">0</span><span style="position:absolute;left:14.3%;transform:translateX(-50%)">0.6</span><span style="position:absolute;left:35.7%;transform:translateX(-50%)">1.5</span><span style="position:absolute;left:71.4%;transform:translateX(-50%)">3.0</span><span style="position:absolute;right:0">mmol/L</span></div></div>
+  <p id="ket-msg" style="font-size:14.5px"></p>
+  ${low?`<div class="ctl"><div class="ctl-top"><span class="lab">Time without enough insulin</span><span class="tiny">hours pass, sped up</span></div><div class="meter"><div id="ket-time" style="background:var(--ket)"></div></div></div>
+  <div class="callout rose"><strong>How ketones turn into ketoacidosis (DKA)</strong><ul class="clean" style="font-size:14.5px">
+   <li>No insulin: fat breaks down fast and floods the liver with fatty acids.</li>
+   <li>The liver makes ketones faster than the body can use them, and keeps releasing glucose too.</li>
+   <li>Ketones are acids, so the blood slowly becomes acidic.</li>
+   <li>High glucose pulls water out in the urine, and dehydration concentrates the acid.</li>
+   <li>Warning signs: nausea or vomiting, stomach pain, deep or fast breathing, fruity breath, drowsiness or confusion. This is a medical emergency.</li></ul></div>
+  <p class="tiny team-only">Exercising with high ketones and too little insulin can push glucose and ketones higher: stress hormones rise and muscle cannot take in glucose properly without insulin. Common triggers are missed doses, illness or infection, and pump or site failure.</p>`
+  :`<p class="tiny">Switch to “Not enough insulin” to see what happens when the supply runs out of control.</p>`}
+  <p class="tiny team-only">Correction to the older slides: the liver does not stop making glucose. Without insulin it releases glucose and makes ketones at the same time. With an SGLT2 inhibitor, ketones can build up even when glucose is close to normal.</p>`;
+  updateKet();}
+function updateKet(){if(layer!=='t1'||!$('#ket-val'))return;const v=ketV;$('#ket-val').textContent=v.toFixed(1);const st=KSTAGE.find(s=>v<s[0]);
+  $('#ket-pill').textContent=st[1];$('#ket-pill').className='pill '+st[2];if(st[1]==='Ketoacidosis risk'){$('#ket-pill').style.background='var(--ket)';$('#ket-pill').style.color='#fff';}else{$('#ket-pill').style.background='';$('#ket-pill').style.color='';}
+  $('#ket-mark').style.left=Math.min(100,v/4.2*100)+'%';$('#ket-msg').textContent=st[3];const tb=$('#ket-time');if(tb)tb.style.width=Math.min(100,ketT/40*100)+'%';}
+let ketAcc=0;
+function stepKet(dt){if(layer!=='t1')return;if(t1Low()){ketT+=dt;const target=.3+3.9*(1-Math.exp(-ketT/14));ketV+=(target-ketV)*Math.min(1,dt*2);}else{ketV+=((mapEx?.5:.3)-ketV)*Math.min(1,dt*.8);}
+  ketAcc+=dt;if(ketAcc>.25){ketAcc=0;updateKet();}}
+
+/* ===== live glucose regulation ===== */
+const SENS={healthy:1,pre:.55,t2:.3,t1:1};
+let G={healthy:5.2,pre:6.2,t2:8.4,t1:7.0}[layer]||5.2, gDrag=false, gHold=0, chainKey='', zoom='cell';
+function geq(){if(t1Low())return 20;return {healthy:5.2,pre:6.2,t2:8.4,t1:7.0}[layer]-(mapEx?(layer==='t1'?2.6:.8):0);}
+function insOut(){if(layer==='t1')return t1Low()?0:1;const drive=.25+clamp((G-4.2)/3.5,0,1.6);return drive*{healthy:1,pre:1.9,t2:1.35}[layer];}
+function gcgOut(){let g=clamp((4.8-G)/1.3,0,1.6);if(layer==='t1')g*=.35;if(layer==='t2'&&G>7)g+=.25;if(t1Low())g+=.6;return g+.05;}
+function gCat(){return G<4?'low':G>7.8?'high':'ok';}
+function stepGlucose(dt){if(gDrag)return;if(gHold>0){gHold-=dt;return;}
+  if(t1Low()){G=Math.min(20,G+dt*.12);return;}
+  const e=geq(),tau=G>e?{healthy:5,pre:10,t2:24,t1:16}[layer]/(mapEx?1.8:1):{healthy:4,pre:4.5,t2:5,t1:14}[layer];G+=(e-G)*(1-Math.exp(-dt/tau));}
+const CH={
+ healthy:{high:[['Glucose rises after a meal'],['Beta cells release insulin within minutes'],['Insulin binds receptors on muscle, liver and fat'],['Muscle and liver store glucose; the liver stops releasing it'],['Glucose settles back into range']],
+  low:[['Glucose falls'],['Insulin release stops'],['Alpha cells release glucagon'],['The liver breaks down glycogen and releases glucose'],['Glucose rises back into range']],
+  ok:[['Insulin and glucagon in balance'],['The liver releases just enough between meals'],['Glucose stays steady']]},
+ pre:{high:[['Glucose rises after a meal'],['Beta cells release extra insulin to push past the resistance','warn'],['Each receptor needs more insulin to open a door','warn'],['Glucose comes down, but more slowly','warn'],['High insulin is often the first sign, years before glucose rises','warn']],
+  low:[['Glucose falls'],['Insulin release stops'],['Alpha cells release glucagon'],['The liver releases glucose'],['Recovery is usually normal']],
+  ok:[['Glucose looks close to normal'],['But insulin is running high to hold it there','warn'],['Fat is starting to build up in liver and muscle','warn']]},
+ t2:{high:[['Glucose rises after a meal'],['Insulin release is smaller and slower: beta cells are tiring','bad'],['Muscle and liver resist insulin','bad'],['The liver keeps releasing glucose even though it is already high','bad'],['Glucose stays high for hours; above about 10, some spills into the urine','bad']],
+  low:[['Glucose falls'],['Insulin release stops and glucagon rises'],['The liver releases glucose'],['Usually recovers, unless insulin or a sulfonylurea keeps lowering it','warn']],
+  ok:[['Fasting glucose sits higher than normal','warn'],['A fatty liver keeps releasing glucose overnight','warn'],['Insulin is present but works less well','warn']]},
+ t1:{high:[['Glucose rises after a meal'],['The pancreas cannot release insulin','bad'],['Only injected insulin can bring it down'],['The dose must match the food: too little stays high, too much goes low','warn']],
+  low:[['Glucose falls'],['Injected insulin keeps working; it cannot be switched off','bad'],['The glucagon response weakens after years with type 1','bad'],['The liver releases less glucose, so recovery is slow','warn'],['Treat with 15 g fast carbohydrate']],
+  ok:[['Injected insulin is doing the beta cells\' job'],['Balance depends on dose, food, activity, stress and sleep']]},
+ t1low:[['No insulin in the blood','bad'],['Muscle and fat cannot take in glucose','bad'],['The liver keeps releasing glucose','bad'],['Fat breaks down and the liver makes ketones','bad'],['Glucose and ketones keep rising: risk of DKA','bad']]
+};
+function renderChain(){const c=gCat(),key=layer+c+t1Ins+mapEx;if(key===chainKey)return;chainKey=key;
+  let steps=t1Low()?CH.t1low:CH[layer][c];if(mapEx&&!t1Low())steps=[[layer==='t1'?'Contracting muscle pulls glucose in on top of injected insulin: it can fall fast':'Contracting muscle pulls glucose in without insulin',layer==='t1'?'warn':'']].concat(steps);
+  $('#chain-head').textContent=(t1Low()?'Not enough insulin':c==='low'?'Too low':c==='high'?'Too high':'In range')+' · '+LAYER_NAME[layer];
+  $('#g-chain').innerHTML=steps.map(([t,k],i)=>`<span class="chw">${i?'<span class="ar" aria-hidden="true">→</span>':''}<span class="ch ${k||'on'}">${esc(t)}</span></span>`).join('');
+  $('#g-note').textContent={healthy:'Glucose returns to range quickly in both directions.',pre:'Glucose still comes back, but it takes more insulin and more time.',t2:'Coming down is slow and incomplete; this model settles around 8 mmol/L without medicines.',t1:t1Low()?'Without insulin, nothing brings glucose down.':'Coming up from a low is slow, and nothing switches injected insulin off.'}[layer]+' Illustrative.';}
+function gStatus(){return G<3?['Very low','bad']:G<4?['Low','bad']:G<=7.8?['In range','ok']:G<=10?['High','warn']:['Very high','bad'];}
+function liveUpdate(){FLOWS.forEach(fl=>{const r=rateOf(fl);fl.rate=r;if(!fl.line)return;fl.line.style.opacity=r>0?1:(fl.ket?0:.35);});
+  const [st,cls]=gStatus();$('#g-out').textContent=G.toFixed(1)+' mmol/L';const gp=$('#g-pill');gp.textContent=st;gp.className='pill '+cls;if(!gDrag)$('#g-slider').value=G.toFixed(1);
+  const hv=$('#hub-val');if(hv){hv.textContent=G.toFixed(1)+' mmol/L';$('#hub-sub').textContent=t1Low()?'plus rising ketones':st;}
+  const bs=$('#bf-status');if(bs)bs.textContent='Blood glucose '+G.toFixed(1)+' mmol/L · '+st+(t1Low()?' · ketones rising':'');
+  renderChain();if(zoom==='cell')cellReadouts();if(zoom==='pancreas')pancReadouts();if(zoom==='liver')liverReadouts();if(zoom==='vessel')vesselReadouts();}
+$('#g-slider').addEventListener('input',e=>{G=parseFloat(e.target.value);gDrag=true;});
+['change','pointerup','touchend','keyup','blur'].forEach(ev=>$('#g-slider').addEventListener(ev,()=>{if(gDrag){gDrag=false;gHold=.8;}}));
+$('.glu-panel').addEventListener('click',e=>{const b=e.target.closest('[data-gp]');if(b){G=parseFloat(b.dataset.gp);gHold=1.0;}});
+
+/* ===== zoom: muscle cell ===== */
+const cell={ins:false,con:false,glu:[],insP:[],t:0,acc:0};
+const RYS=[...Array(8)].map((_,i)=>36+i*35);
+const NEED={healthy:1,pre:2,t2:4,t1:1};
+const MCT_Y=[53.5,158.5,263.5];
+const SITES=[[241,-7],[241,7],[232,-7],[232,7]];
+function buildCell(){const svg=$('#cell-svg');svg.innerHTML='';
+  S('rect',{x:0,y:0,width:252,height:320,style:'fill:var(--blood)'},svg);S('rect',{x:262,y:0,width:378,height:320,style:'fill:var(--cell)'},svg);
+  cell.fibres=S('g',{},svg);for(let i=0;i<9;i++)S('line',{x1:300,x2:620,y1:22+i*34,y2:22+i*34,'stroke-width':6,style:'stroke:var(--surface-2);opacity:.6'},cell.fibres);
+  S('rect',{x:252,y:0,width:10,height:320,style:'fill:var(--mem)'},svg);
+  cell.mito=[];[[540,64],[592,168],[512,250],[600,276]].forEach(([x,y])=>{cell.mito.push({x,y,f:0,e:S('ellipse',{cx:x,cy:y,rx:28,ry:13,'stroke-width':1.5,style:'fill:var(--teal-soft);stroke:var(--teal)'},svg)});S('path',{d:`M${x-18} ${y} q6 -8 12 0 t12 0 t12 0`,fill:'none','stroke-width':1.2,style:'stroke:var(--teal)'},svg);});
+  cell.sigG=S('g',{},svg);cell.recG=S('g',{},svg);cell.doorG=S('g',{},svg);
+  cell.mctG=S('g',{},svg);MCT_Y.forEach(y=>{S('rect',{x:249,y:y-10,width:16,height:20,rx:4,style:'fill:var(--ket);opacity:.85'},cell.mctG);S('line',{x1:257,x2:257,y1:y-6,y2:y+6,'stroke-width':2,style:'stroke:var(--surface)'},cell.mctG);S('text',{x:270,y:y+4,'font-size':10.5,'font-weight':700,class:'team-only',style:'fill:var(--ket)',text:'MCT1'},cell.mctG);});
+  cell.pG=S('g',{},svg);cell.ket=[];cell.kTok=0;
+  cell.rec=RYS.map((y,i)=>{const hx=330+(i%3)*44+Math.random()*24,hy=y+(Math.random()-.5)*10;
+    const sig=S('path',{d:`M262 ${y} L${hx} ${hy}`,fill:'none','stroke-width':1.5,'stroke-dasharray':'3 4',style:'stroke:var(--muted);opacity:.35'},cell.sigG);
+    const g=S('g',{},cell.recG);S('path',{d:`M252 ${y} h-8 l-6 -6 m6 6 l-6 6`,fill:'none','stroke-width':3,'stroke-linecap':'round',style:'stroke:var(--mem)'},g);
+    const sites=SITES.map(([x,dy])=>S('circle',{cx:x-6,cy:y+dy,r:3.4,fill:'none','stroke-width':1.3,style:'stroke:var(--ins)'},g));
+    const door=S('rect',{width:16,height:20,rx:4,style:'fill:var(--teal)'},cell.doorG);
+    return {y,hx,hy,o:0,sig,sites,door,bound:[]};});
+  const lab=S('g',{},svg);S('rect',{x:12,y:8,width:52,height:20,rx:5,style:'fill:var(--surface);opacity:.85'},lab);
+  S('text',{x:20,y:22,'font-size':12.5,'font-weight':700,style:'fill:var(--head)',text:'Blood'},lab);S('text',{x:278,y:22,'font-size':12.5,'font-weight':700,style:'fill:var(--head)',text:'Muscle cell'},lab);
+  cell.sigTxt=S('text',{x:278,y:310,'font-size':11.5,class:'team-only',style:'fill:var(--muted)'},svg);
+  cell.glu=[];cell.insP=[];for(let i=0;i<70;i++)spawnGlu(true);}
+function spawnGlu(any){const c=S('circle',{r:4,style:'fill:var(--glu)'},cell.pG);cell.glu.push({x:any?10+Math.random()*220:8,y:10+Math.random()*300,vx:(Math.random()-.3)*40,vy:(Math.random()-.5)*40,c,st:'blood',a:1});}
+function syncCell(){$('#cell-layer').textContent=LAYER_NAME[layer]+(t1Low()?' · not enough insulin':'');$('#cell-ins-wrap').hidden=layer!=='t1';$('#cell-ins').checked=layer==='t1'?!t1Low():true;$('#cell-con').checked=cell.con;
+  const need=NEED[layer];cell.rec.forEach(r=>r.sites.forEach((s,j)=>s.style.display=j<need?'':'none'));
+  cell.fibres.style.display=cell.con?'':'none';cell.mctG.style.display=layer==='t1'?'':'none';$('#ro-ket-wrap').hidden=layer!=='t1';$('#ket-research').hidden=layer!=='t1';
+  const t={healthy:'Insulin binds a receptor and the signal brings a GLUT4 door to the surface. One insulin per receptor is enough, so a normal amount of insulin opens most doors.',
+   pre:'Insulin resistance: each receptor now needs two insulin to open its door. The pancreas makes up for it by releasing much more insulin, so glucose stays near normal. High insulin comes first.',
+   t2:'Each receptor now needs four insulin, and the tiring pancreas cannot keep up. Insulin is still high, but few doors open and glucose builds up in the blood.',
+   t1:t1Low()?'No insulin, so no receptors are switched on. Without contraction, the doors stay shut and glucose builds up.':'Injected insulin binds the receptors normally. Add contraction and even more doors open, which is why glucose can fall fast.'}[layer];
+  const kt=layer!=='t1'?'':t1Low()?' Ketones pour in from the liver. They do not open GLUT4 doors; they use their own transporter (MCT1, pink) and are burned in the mitochondria. Muscle can only burn so many, so ketones, which are acids, build up in the blood while glucose stays locked out.':' A few ketones are always around as backup fuel. They slip in through their own transporter (MCT1, pink), not the GLUT4 doors, and are burned in the mitochondria.';
+  $('#cell-text').textContent=t+(cell.con?' Contraction is opening doors too, without needing insulin.':'')+kt;}
+function cellReadouts(){const io=insOut(),n=cell.rec.filter(r=>r.o>.85).length,inB=cell.glu.filter(g=>g.st==='blood').length;
+  $('#ro-ins').textContent=io<.05?'None':io<.7?'Low':io<1.25?'Normal':io<2?'High':'Very high';$('#ro-need').textContent=NEED[layer]+(NEED[layer]===1?' insulin':' insulin');
+  $('#ro-doors').textContent=n+'/8';if(layer==='t1')$('#ro-ket').textContent=ketV<.6?'Low':ketV<1.5?'Rising':ketV<3?'High':'Very high';$('#ro-blood').textContent=inB>95?'High':inB>60?'Rising':'Normal';
+  cell.sigTxt.textContent=cell.con?'contraction → AMPK → GLUT4 to surface':io<.05?'no insulin signal':NEED[layer]>1?'more insulin needed per receptor (insulin resistance)':'insulin → receptor → GLUT4 to surface';}
+$('#cell-ins').addEventListener('change',e=>{if(layer==='t1'){t1Ins=e.target.checked?'ok':'low';if(e.target.checked)ketT=0;segSet('#t1ins-seg','data-ti',t1Ins);renderMap();}});
+$('#cell-con').addEventListener('change',e=>{cell.con=e.target.checked;mapEx=cell.con;$('#map-ex').checked=mapEx;renderMap();});
+function stepCell(dt){cell.t+=dt;const need=NEED[layer];
+  const want=Math.round(insOut()*10);
+  while(cell.insP.filter(q=>!q.gone).length<want){const c=S('circle',{r:3.6,style:'fill:var(--ins)'},cell.pG);cell.insP.push({x:40+Math.random()*190,y:10+Math.random()*300,vx:0,vy:0,c,rec:null,dw:0});}
+  let extra=cell.insP.filter(q=>!q.gone).length-want;cell.insP.forEach(q=>{if(extra>0&&!q.rec&&!q.gone){q.gone=true;extra--;}});
+  cell.insP=cell.insP.filter(q=>{if(q.gone&&!q.rec){q.c.remove();return false;}if(q.rec){q.dw-=dt;if(q.dw<=0){const r=q.rec;r.bound=r.bound.filter(x=>x!==q);q.rec=null;q.vx=-50;q.x-=6;}else{const j=q.rec.bound.indexOf(q);const [sx,dy]=SITES[j];q.x=sx-6;q.y=q.rec.y+dy;}}
+    else{q.vx+=(Math.random()-.3)*90*dt;q.vy+=(Math.random()-.5)*70*dt;q.vx=clamp(q.vx*.97,-45,45);q.vy=clamp(q.vy*.97,-45,45);q.x=clamp(q.x+q.vx*dt,6,236);q.y=clamp(q.y+q.vy*dt,6,314);
+      if(q.x>130){const r=cell.rec.filter(r=>r.bound.length<need).sort((a,b)=>Math.abs(a.y-q.y)-Math.abs(b.y-q.y))[0];if(r){q.vx+=30*dt;q.vy+=(r.y-q.y)*1.6*dt;}if(q.x>205&&r&&Math.abs(r.y-q.y)<18){r.bound.push(q);q.rec=r;q.dw=4+Math.random()*2;}else if(q.x>230)q.vx=-Math.abs(q.vx);}if(false){const r=null;if(r&&Math.abs(r.y-q.y)<18){r.bound.push(q);q.rec=r;q.dw=4+Math.random()*2;}else if(q.x>230)q.vx=-Math.abs(q.vx);}}
+    q.c.setAttribute('cx',q.x);q.c.setAttribute('cy',q.y);return true;});
+  cell.rec.forEach((r,i)=>{const open=r.bound.length>=need||(cell.con&&i%4!==3);r.o+=((open?1:0)-r.o)*Math.min(1,dt*2.4);
+    r.door.setAttribute('x',lerp(r.hx,256,r.o)-8);r.door.setAttribute('y',lerp(r.hy,r.y,r.o)-10);r.door.setAttribute('opacity',.5+.5*r.o);
+    r.sig.style.stroke=open?'var(--teal)':'var(--muted)';r.sig.style.opacity=open?.9:.3;r.sites.forEach((s,j)=>s.setAttribute('fill',j<r.bound.length?'var(--ins)':'none'));});
+  if(cell.con){const s=1+.04*Math.sin(cell.t*8);cell.fibres.setAttribute('transform',`translate(${460*(1-s)} 0) scale(${s} 1)`);}
+  if(layer==='t1'){const want=clamp(Math.round(2+ketV*9),2,42);const inB=cell.ket.filter(k=>k.st==='blood');
+    if(inB.length<want){cell.kAcc=(cell.kAcc||0)+dt*(t1Low()?6:2);while(cell.kAcc>=1){cell.kAcc-=1;cell.ket.push({x:6+Math.random()*30,y:10+Math.random()*300,vx:30,vy:0,st:'blood',a:1,c:S('circle',{r:3.6,style:'fill:var(--ket)'},cell.pG)});}}
+    cell.kTok=Math.min(3,cell.kTok+dt*(cell.con?2.4:1.1));}
+  else if(cell.ket.length){cell.ket.forEach(k=>k.c.remove());cell.ket=[];}
+  cell.ket=cell.ket.filter(k=>{if(k.st==='blood'){k.vx+=(Math.random()-.42)*80*dt;k.vy+=(Math.random()-.5)*80*dt;k.vx=clamp(k.vx,-40,50);k.vy=clamp(k.vy,-40,40);k.x+=k.vx*dt;k.y+=k.vy*dt;
+      if(k.y<6||k.y>314){k.vy*=-1;k.y=clamp(k.y,6,314);}if(k.x<6){k.vx=Math.abs(k.vx);k.x=6;}
+      if(k.x>242){const m=MCT_Y.find(y=>Math.abs(y-k.y)<11);if(m!=null&&cell.kTok>=1){cell.kTok-=1;k.st='in';k.y=m;k.tg=cell.mito[Math.floor(Math.random()*cell.mito.length)];}else{k.vx=-Math.abs(k.vx)*.8;k.x=242;}}}
+    else{const dx=k.tg.x-k.x,dy=k.tg.y-k.y,d=Math.hypot(dx,dy);if(d<10){k.tg.f=1;k.c.remove();return false;}k.x+=dx/d*90*dt;k.y+=dy/d*90*dt;}
+    k.c.setAttribute('cx',k.x);k.c.setAttribute('cy',k.y);return true;});
+  cell.mito.forEach(m=>{if(m.f>0){m.f=Math.max(0,m.f-dt*2.5);}m.e.setAttribute('stroke-width',1.5+m.f*3);m.e.style.stroke=m.f>.05?'var(--ket)':'var(--teal)';});
+  const target=clamp(Math.round(40+G*7),40,140);
+  if(cell.glu.filter(g=>g.st==='blood').length<target){cell.acc+=dt*8;while(cell.acc>=1){cell.acc-=1;spawnGlu(false);}}
+  cell.glu=cell.glu.filter(g=>{if(g.st==='blood'){g.vx+=(Math.random()-.45)*80*dt;g.vy+=(Math.random()-.5)*80*dt;g.vx=clamp(g.vx,-40,55);g.vy=clamp(g.vy,-40,40);g.x+=g.vx*dt;g.y+=g.vy*dt;
+      if(g.y<6||g.y>314){g.vy*=-1;g.y=clamp(g.y,6,314);}if(g.x<6){g.vx=Math.abs(g.vx);g.x=6;}
+      if(g.x>244){const d=cell.rec.find(d=>d.o>.85&&Math.abs(d.y-g.y)<11);if(d){g.st='in';g.y=d.y;g.vx=60;g.vy=(Math.random()-.5)*30;}else{g.vx=-Math.abs(g.vx)*.8;g.x=244;}}}
+    else{g.x+=g.vx*dt;g.y+=g.vy*dt;if(g.x>390)g.a-=dt*1.4;if(g.a<=0){g.c.remove();return false;}}
+    g.c.setAttribute('cx',g.x);g.c.setAttribute('cy',g.y);g.c.setAttribute('opacity',g.a);return true;});}
+function drawStage(){const svg=$('#stage-svg');const xs=[70,200,330,460],ins=[1,1.8,2.3,1.5],glu=[1,1.03,1.2,1.75],Y=v=>160-(v-.6)/(2.5-.6)*130;
+  const cur={healthy:0,pre:2,t2:3}[layer];let s='';
+  if(cur!=null)s+=`<rect x="${xs[cur]-52}" y="8" width="104" height="160" rx="8" style="fill:var(--teal-soft)"/>`;
+  s+=`<line x1="20" x2="510" y1="${Y(1)}" y2="${Y(1)}" stroke-dasharray="3 4" style="stroke:var(--line)"/><text x="22" y="${Y(1)-5}" font-size="10.5" style="fill:var(--muted)">normal</text>`;
+  s+=`<polyline fill="none" stroke-width="3" style="stroke:var(--ins)" points="${xs.map((x,i)=>x+','+Y(ins[i])).join(' ')}"/><polyline fill="none" stroke-width="3" style="stroke:var(--glu)" points="${xs.map((x,i)=>x+','+Y(glu[i])).join(' ')}"/>`;
+  xs.forEach((x,i)=>{s+=`<circle cx="${x}" cy="${Y(ins[i])}" r="4" style="fill:var(--ins)"/><circle cx="${x}" cy="${Y(glu[i])}" r="4" style="fill:var(--glu)"/>`;});
+  s+=`<text x="${xs[2]+8}" y="${Y(ins[2])-8}" font-size="12" font-weight="700" style="fill:var(--ins)">Insulin</text><text x="${xs[3]-6}" y="${Y(glu[3])-10}" text-anchor="end" font-size="12" font-weight="700" style="fill:var(--glu)">Glucose</text>`;
+  ['No diabetes','Insulin resistance','Prediabetes','Type 2'].forEach((t,i)=>s+=`<text x="${xs[i]}" y="184" text-anchor="middle" font-size="12" ${i===cur?'font-weight="700"':''} style="fill:var(${i===cur?'--head':'--muted'})">${t}</text>`);
+  if(layer==='t1')s+=`<text x="260" y="12" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--head)">Type 1 is different: little or no insulin from the start</text>`;
+  svg.innerHTML=s;}
+
+/* ===== zoom: pancreas ===== */
+const panc={beta:[],alpha:[],imm:[],p:[],acc:0,gacc:0,t:0};
+function buildPanc(){const svg=$('#panc-svg');svg.innerHTML='';
+  S('rect',{x:0,y:262,width:640,height:44,rx:22,style:'fill:var(--blood)'},svg);
+  S('text',{x:16,y:288,'font-size':12,'font-weight':700,style:'fill:var(--head)',text:'Blood vessel'},svg);
+  S('ellipse',{cx:320,cy:138,rx:150,ry:112,'stroke-width':1.5,'stroke-dasharray':'5 4',style:'fill:var(--cell);stroke:var(--mem)'},svg);
+  S('text',{x:320,y:20,'text-anchor':'middle','font-size':12.5,'font-weight':700,style:'fill:var(--head)',text:'An islet in the pancreas'},svg);
+  panc.fatG=S('g',{},svg);panc.cellG=S('g',{},svg);panc.immG=S('g',{},svg);panc.pG=S('g',{},svg);
+  panc.beta=[];panc.alpha=[];let k=0;
+  for(let r=0;r<3;r++)for(let a=0;a<(r===0?1:r===1?8:13);a++){const ang=a/(r===0?1:r===1?8:13)*Math.PI*2+r*.4,rr=r*34;const x=320+Math.cos(ang)*rr*1.25,y=138+Math.sin(ang)*rr*.95;
+    const c=S('circle',{cx:x,cy:y,r:14,'stroke-width':1.5,style:'fill:var(--ins);fill-opacity:.35;stroke:var(--ins)'},panc.cellG);panc.beta.push({x,y,c,k:k++});}
+  for(let a=0;a<10;a++){const ang=a/10*Math.PI*2+.2;const x=320+Math.cos(ang)*128,y=138+Math.sin(ang)*92;const c=S('circle',{cx:x,cy:y,r:12,'stroke-width':1.5,style:'fill:var(--gcg);fill-opacity:.35;stroke:var(--gcg)'},panc.cellG);panc.alpha.push({x,y,c});}
+  for(let i=0;i<7;i++){const ang=i/7*Math.PI*2;const x=320+Math.cos(ang)*72,y=138+Math.sin(ang)*58;const g=S('g',{},panc.immG);S('circle',{cx:x,cy:y,r:7,style:'fill:var(--mem)'},g);for(let s=0;s<6;s++){const a2=s/6*Math.PI*2;S('line',{x1:x+Math.cos(a2)*7,y1:y+Math.sin(a2)*7,x2:x+Math.cos(a2)*11,y2:y+Math.sin(a2)*11,'stroke-width':2,style:'stroke:var(--mem)'},g);}panc.imm.push(g);}
+  for(let i=0;i<9;i++){S('circle',{cx:200+Math.random()*240,cy:60+Math.random()*150,r:4+Math.random()*3,style:'fill:var(--fat);opacity:.8'},panc.fatG);}
+  panc.lab=S('text',{x:624,y:40,'text-anchor':'end','font-size':11.5,style:'fill:var(--muted)'},svg);}
+function betaState(b){if(layer==='t1')return b.k%7===3?'tired':'gone';if(layer==='t2')return b.k%5<2?'gone':b.k%5===2?'tired':'ok';return 'ok';}
+function syncPanc(){panc.beta.forEach(b=>{const st=betaState(b);b.st=st;b.c.style.fillOpacity=st==='gone'?.06:st==='tired'?.2:.4;b.c.style.strokeDasharray=st==='gone'?'3 3':'';b.c.style.stroke=st==='gone'?'var(--muted)':'var(--ins)';});
+  panc.immG.style.display=layer==='t1'?'':'none';panc.fatG.style.display=layer==='t2'||layer==='pre'?'':'none';panc.fatG.style.opacity=layer==='pre'?.45:1;
+  const tx={healthy:'Beta cells sense glucose and release insulin as soon as it rises. When glucose falls, they stop and the alpha cells release glucagon.',
+   pre:'Beta cells are working overtime, releasing far more insulin to push past insulin resistance. This keeps glucose near normal for years, at a cost.',
+   t2:'Some beta cells have tired or been lost. The rest cannot release enough insulin, and the first fast burst after a meal is blunted. Glucagon is also not switched off properly after meals.',
+   t1:'The immune system has destroyed most beta cells, so the pancreas cannot release insulin. Alpha cells remain, but after some years their glucagon response to a low weakens.'}[layer];
+  $('#panc-text').textContent=tx;
+  $('#panc-team').innerHTML={healthy:'Insulin release has a fast first phase within minutes of a rise, then a slower second phase. '+TAG.strong,pre:'Compensatory hyperinsulinaemia is often the earliest measurable change, before fasting glucose rises. '+TAG.strong,t2:'Progressive beta-cell dysfunction drives the move from prediabetes to type 2. In DiRECT, sustained weight loss of 10 kg or more led to remission in about two thirds of people; lower liver and pancreas fat is one proposed reason. '+TAG.moderate,t1:'Autoimmune T-cell destruction of beta cells. Defective glucagon counter-regulation is one reason lows are more dangerous in long-standing type 1. '+TAG.strong}[layer];}
+function pancReadouts(){const io=layer==='t1'?0:insOut(),gc=gcgOut();
+  $('#pz-beta').textContent={healthy:'All',pre:'All, overworked',t2:'Fewer, tiring',t1:'Almost none'}[layer];$('#pz-ins').textContent=io<.05?'None':io<.7?'Low':io<1.25?'Normal':io<2?'High':'Very high';$('#pz-gcg').textContent=gc<.3?'Low':gc<.9?'Rising':'High';
+  panc.lab.textContent=layer==='t1'&&!t1Low()?'insulin in the blood comes from injections or a pump':'';}
+function stepPanc(dt){panc.t+=dt;const io=layer==='t1'?0:insOut(),gc=gcgOut();
+  const live=panc.beta.filter(b=>b.st!=='gone');const pulse=layer==='pre'?.3:.12;
+  live.forEach(b=>b.c.setAttribute('r',13+Math.min(2.5,pulse*io*5)*(.5+.5*Math.sin(panc.t*5+b.k))));
+  panc.acc+=dt*io*7;while(panc.acc>=1&&live.length){panc.acc-=1;const b=live[Math.floor(Math.random()*live.length)];panc.p.push({x:b.x,y:b.y,k:'ins',ph:0,c:S('circle',{r:3.4,style:'fill:var(--ins)'},panc.pG)});}
+  panc.gacc+=dt*gc*5;while(panc.gacc>=1){panc.gacc-=1;const a=panc.alpha[Math.floor(Math.random()*panc.alpha.length)];panc.p.push({x:a.x,y:a.y,k:'gcg',ph:0,c:S('circle',{r:3.4,style:'fill:var(--gcg)'},panc.pG)});}
+  panc.alpha.forEach((a,i)=>a.c.setAttribute('r',12+gc*3*Math.sin(panc.t*5+i)));
+  if(layer==='t1')panc.imm.forEach((g,i)=>g.setAttribute('transform',`translate(${4*Math.sin(panc.t*1.3+i)} ${3*Math.cos(panc.t*1.1+i)})`));
+  panc.p=panc.p.filter(p=>{if(p.ph===0){p.y+=70*dt;p.x+=(320-p.x)*.0+(Math.random()-.5)*20*dt;if(p.y>=284){p.ph=1;p.y=272+Math.random()*24;}}else{p.x+=110*dt;if(p.x>650){p.c.remove();return false;}}p.c.setAttribute('cx',p.x);p.c.setAttribute('cy',p.y);return true;});}
+
+/* ===== zoom: liver ===== */
+const liv={gly:.6,p:[],acc:0,racc:0,kacc:0,gr:[],fat:[]};
+function buildLiver(){const svg=$('#liver-svg');svg.innerHTML='';
+  S('rect',{x:0,y:0,width:150,height:320,style:'fill:var(--blood)'},svg);
+  S('text',{x:14,y:22,'font-size':12.5,'font-weight':700,style:'fill:var(--head)',text:'Blood'},svg);
+  const hx=[[180,30],[600,30],[630,160],[600,290],[180,290],[160,160]];S('polygon',{points:hx.map(p=>p.join(',')).join(' '),'stroke-width':6,style:'fill:var(--cell);stroke:var(--mem)'},svg);
+  S('text',{x:200,y:56,'font-size':12.5,'font-weight':700,style:'fill:var(--head)',text:'Liver cell'},svg);
+  S('circle',{cx:470,cy:160,r:30,style:'fill:var(--surface-2);stroke:var(--line)'},svg);S('text',{x:470,y:164,'text-anchor':'middle','font-size':11,style:'fill:var(--muted)',text:'nucleus'},svg);
+  liv.recG=S('g',{},svg);[90,160,230].forEach(y=>S('path',{d:`M160 ${y} h-10 l-7 -7 m7 7 l-7 7`,fill:'none','stroke-width':3,'stroke-linecap':'round',style:'stroke:var(--mem)'},liv.recG));
+  liv.grG=S('g',{},svg);liv.gr=[];for(let i=0;i<36;i++){const x=230+(i%9)*24+(Math.floor(i/9)%2)*12,y=96+Math.floor(i/9)*34;const g=S('g',{},liv.grG);for(let j=0;j<5;j++){const a=j/5*Math.PI*2;S('circle',{cx:x+Math.cos(a)*5,cy:y+Math.sin(a)*5,r:3,style:'fill:var(--glu)'},g);}liv.gr.push(g);}
+  S('text',{x:230,y:80,'font-size':11.5,style:'fill:var(--muted)',text:'glycogen (stored glucose)'},svg);
+  liv.fatG=S('g',{},svg);liv.fat=[];for(let i=0;i<14;i++){liv.fat.push(S('circle',{cx:250+((i*67)%300),cy:230+((i*37)%45),r:8+(i%3)*3,style:'fill:var(--fat);opacity:.85;stroke:var(--surface)','stroke-width':1},liv.fatG));}
+  liv.pG=S('g',{},svg);}
+function syncLiver(){const nf={healthy:1,pre:5,t2:12,t1:1}[layer];liv.fat.forEach((f,i)=>f.style.display=i<nf?'':'none');
+  liv.recG.style.opacity=layer==='t2'?.35:layer==='pre'?.65:1;
+  $('#liver-text').textContent={healthy:'After a meal, insulin tells the liver to store glucose as glycogen and stop releasing it. Between meals and overnight, glucagon tells it to break glycogen down and release glucose.',
+   pre:'Fat is starting to build up inside liver cells. The liver needs more insulin to stop releasing glucose, so fasting glucose creeps up.',
+   t2:'A fatty liver ignores insulin and keeps releasing glucose even when blood glucose is already high. This is a big driver of high fasting and overnight glucose.',
+   t1:t1Low()?'Without insulin the liver keeps releasing glucose and turns fatty acids into ketones. Ketones are acids, so the blood slowly becomes acidic.':'With injected insulin the liver stores and releases glucose normally, but only as well as the dose and timing match the day.'}[layer];
+  $('#liver-team').innerHTML={healthy:'Hepatic glucose output is suppressed by insulin and stimulated by glucagon and adrenaline. '+TAG.strong,pre:'Hepatic insulin resistance and liver fat often appear early. Regular training lowers liver fat, even before weight changes. '+TAG.moderate,t2:'Hepatic insulin resistance drives fasting hyperglycaemia. Liver fat falls with training and weight loss; in DiRECT, remission tracked sustained weight loss. '+TAG.moderate,t1:'Insulin deficiency raises hepatic glucose output and ketogenesis together. '+TAG.strong}[layer];}
+function liverReadouts(){const st=rateOf(FL('hub','liver','glu')),rl=rateOf(FL('liver','hub','glu'));
+  $('#lz-gly').textContent=Math.round(liv.gly*100)+'%';$('#lz-mode').textContent=st>rl+.15?'Storing':rl>st+.15?'Releasing':'Balanced';
+  $('#lz-fat').textContent={healthy:'Normal',pre:'Building up',t2:'High',t1:'Normal'}[layer];$('#lz-ket').textContent=layer==='t1'?(t1Low()?'High':'Low'):'Low';}
+function stepLiver(dt){const st=rateOf(FL('hub','liver','glu')),rl=rateOf(FL('liver','hub','glu'));
+  liv.gly=clamp(liv.gly+(st-rl)*dt*.04,.05,1);const n=Math.round(liv.gly*36);liv.gr.forEach((g,i)=>g.style.display=i<n?'':'none');
+  liv.acc+=dt*st*6;while(liv.acc>=1){liv.acc-=1;liv.p.push({x:10+Math.random()*60,y:40+Math.random()*240,dir:1,k:'glu',c:S('circle',{r:4,style:'fill:var(--glu)'},liv.pG)});}
+  liv.racc+=dt*rl*6;while(liv.racc>=1){liv.racc-=1;liv.p.push({x:240+Math.random()*200,y:100+Math.random()*100,dir:-1,k:'glu',c:S('circle',{r:4,style:'fill:var(--glu)'},liv.pG)});}
+  if(t1Low()){liv.kacc+=dt*5;while(liv.kacc>=1){liv.kacc-=1;liv.p.push({x:260+Math.random()*250,y:220+Math.random()*50,dir:-1,k:'ket',c:S('circle',{r:3.6,style:'fill:var(--ket)'},liv.pG)});}}
+  liv.p=liv.p.filter(p=>{p.x+=p.dir*90*dt;p.y+=(Math.random()-.5)*30*dt;if((p.dir>0&&p.x>300)||(p.dir<0&&p.x<-5)){p.c.remove();return false;}p.c.setAttribute('cx',p.x);p.c.setAttribute('cy',p.y);p.c.setAttribute('opacity',p.dir>0&&p.x>230?Math.max(0,(300-p.x)/70):1);return true;});}
+
+/* ===== zoom switching ===== */
+const ZOOM={cell:['Inside a muscle cell','Glucose needs a door (GLUT4) to get into muscle. Insulin has to bind a receptor to open a door, but contraction opens doors too. That second route is why exercise works even when insulin does not.',
+   '<span><i style="background:var(--glu)"></i>Glucose</span><span><i style="background:var(--ins)"></i>Insulin</span><span><i style="background:none;border:1.5px solid var(--ins)"></i>Empty insulin site</span><span><i class="sq" style="background:var(--teal)"></i>GLUT4 door</span><span class="ket-leg"><i style="background:var(--ket)"></i>Ketones (type 1)</span><span class="ket-leg"><i class="sq" style="background:var(--ket)"></i>MCT1 ketone transporter</span>'],
+ pancreas:['Inside the pancreas','Islets in the pancreas hold beta cells, which make insulin, and alpha cells, which make glucagon. Move the blood glucose slider and watch which cells respond.',
+   '<span><i style="background:var(--ins);opacity:.6"></i>Beta cell</span><span><i style="background:var(--gcg);opacity:.6"></i>Alpha cell</span><span><i style="background:var(--ins)"></i>Insulin</span><span><i style="background:var(--gcg)"></i>Glucagon</span><span><i style="background:var(--mem)"></i>Immune cell (type 1)</span><span><i style="background:var(--fat)"></i>Fat</span>'],
+ vessel:['Inside a blood vessel','Watch what travels in the blood: glucose, insulin, ketones, red cells and lipoproteins carrying cholesterol. Move the years slider to see how the artery lining and wall change over time.',
+   '<span><i style="background:var(--glu)"></i>Glucose</span><span><i style="background:var(--ins)"></i>Insulin</span><span class="ket-leg"><i style="background:var(--ket)"></i>Ketones</span><span><i style="background:var(--fat);border:1.5px solid var(--orange)"></i>LDL (carries cholesterol)</span><span><i style="background:var(--glu);border:1.5px solid var(--orange)"></i>LDL with glucose stuck on (exaggerated to be visible)</span><span><i style="background:var(--surface);border:1.5px solid var(--fat)"></i>HDL</span><span><i style="background:var(--rose);opacity:.55"></i>Red blood cell</span><span><i style="background:var(--gcg)"></i>Macrophage, foam cell</span><span><i class="sq" style="background:var(--teal)"></i>Lining cell</span><span><i class="sq" style="background:var(--glu)"></i>Sugar cross-link</span>'],
+ liver:['Inside the liver','The liver is the body\'s glucose bank. Insulin tells it to save glucose as glycogen; glucagon tells it to spend. Push glucose high or low and watch the store fill or empty.',
+   '<span><i style="background:var(--glu)"></i>Glucose</span><span><i style="background:var(--glu);opacity:.6"></i>Glycogen</span><span><i style="background:var(--fat)"></i>Fat droplet</span><span><i style="background:var(--ket)"></i>Ketones</span>']};
+function setZoom(z){zoom=z;segSet('#zoom-seg','data-z',z);$$('[data-zs]').forEach(e=>e.hidden=e.dataset.zs!==z);const [h,p,l]=ZOOM[z];$('#zoom-h').textContent=h;$('#zoom-p').textContent=p;$('#zoom-legend').innerHTML=l;$$('#zoom-legend .ket-leg').forEach(e=>e.hidden=layer!=='t1');}
+segBind('#zoom-seg','data-z',setZoom);
+function syncZoom(){$$('#zoom-legend .ket-leg').forEach(e=>e.hidden=layer!=='t1');syncCell();syncPanc();syncLiver();drawStage();syncVessel();}
+function stepZoom(dt){if(zoom==='cell')stepCell(dt);else if(zoom==='pancreas')stepPanc(dt);else if(zoom==='vessel')stepVessel(dt);else stepLiver(dt);}
+
+/* ===== zoom: blood vessel ===== */
+const ves={yrs:store.get('vyrs',10),care:false,p:[],t:0,ent:[],acc:{}};
+const VRATE={healthy:.012,pre:.025,t2:.045,t1:.035};
+function vP(){return clamp(ves.yrs*VRATE[layer]*(ves.care?.5:1),0,1);}
+function vD(){const P=vP();return{P,dmg:clamp(P*2,0,1),trap:Math.round(clamp(P*1.5,0,1)*10),foam:clamp((P-.2)/.6,0,1),plq:clamp((P-.3)/.7,0,1),stiff:clamp(P*1.1,0,1)};}
+const VC=160,LH=70,PX=360,PW=120;
+function innerTop(x,d){const bump=d.plq*48*Math.exp(-Math.pow((x-PX)/PW*1.6,2));return VC-LH+d.P*6+bump;}
+function innerBot(x,d){const bump=d.plq*14*Math.exp(-Math.pow((x-470)/90*1.6,2));return VC+LH-d.P*6-bump;}
+function buildVessel(){const svg=$('#vessel-svg');svg.innerHTML=`<rect width="640" height="320" style="fill:var(--surface-2)"/><g id="v-pulse"><g id="v-wall"></g><g id="v-parts"></g><g id="v-ent"></g></g><text x="12" y="18" font-size="12.5" font-weight="700" style="fill:var(--head)">Artery wall</text><text x="12" y="${VC+4}" font-size="12.5" font-weight="700" style="fill:var(--head)" id="v-flowlab">Blood flow →</text><text x="628" y="312" text-anchor="end" font-size="11.5" id="v-no" style="fill:var(--teal)"></text>`;
+  ves.wall=$('#v-wall');ves.pG=$('#v-parts');ves.eG=$('#v-ent');ves.p=[];ves.ent=[];syncVessel();}
+function syncVessel(){if(!ves.wall)return;const d=vD();const W=40+d.P*16;let s='';
+  const top=[],bot=[];for(let x=0;x<=640;x+=8){top.push([x,innerTop(x,d)]);bot.push([x,innerBot(x,d)]);}
+  const outT=VC-LH-W,outB=VC+LH+W;
+  s+=`<path d="M0 ${outT} L640 ${outT} L640 ${top[top.length-1][1]} ${top.slice().reverse().map(p=>'L'+p[0]+' '+p[1].toFixed(1)).join(' ')} Z" style="fill:var(--wall)"/>`;
+  s+=`<path d="M0 ${outB} L640 ${outB} L640 ${bot[bot.length-1][1]} ${bot.slice().reverse().map(p=>'L'+p[0]+' '+p[1].toFixed(1)).join(' ')} Z" style="fill:var(--wall)"/>`;
+  for(let i=1;i<4;i++){const y=outT+i*W/4.5;s+=`<line x1="0" x2="640" y1="${y}" y2="${y}" style="stroke:var(--wall-line);opacity:.5"/>`;const y2=outB-i*W/4.5;s+=`<line x1="0" x2="640" y1="${y2}" y2="${y2}" style="stroke:var(--wall-line);opacity:.5"/>`;}
+  // stiffness cross-links (AGEs)
+  const nx=Math.round(d.stiff*16);for(let i=0;i<nx;i++){const x=20+i*38,y=outT+8+(i%3)*7,y2=outB-8-(i%3)*7;s+=`<path d="M${x} ${y} l10 8 m0 -8 l-10 8" stroke-width="1.6" style="stroke:var(--glu)"/><path d="M${x+14} ${y2} l10 -8 m0 8 l-10 -8" stroke-width="1.6" style="stroke:var(--glu)"/>`;}
+  // plaque: lipid core + foam cells + fibrous cap
+  if(d.plq>0){const core=[];for(let x=PX-150;x<=PX+150;x+=6){const yi=innerTop(x,d);const base=VC-LH+d.P*6;if(yi>base+2)core.push([x,base+(yi-base)*.35]);}
+    if(core.length>2)s+=`<path d="M${core.map(p=>p[0]+' '+p[1].toFixed(1)).join(' L')} Z" style="fill:var(--fat);opacity:.35"/>`;
+    if(d.plq>.4){s+=`<path d="M${top.filter(p=>Math.abs(p[0]-PX)<160).map(p=>p[0]+' '+(p[1]-3).toFixed(1)).join(' L')}" fill="none" stroke-width="3.5" style="stroke:var(--wall-line)"/>`;}}
+  const nf=Math.round(d.foam*7);for(let i=0;i<nf;i++){const x=PX-90+i*30,y=(innerTop(x,d)+(VC-LH+d.P*6))/2-10+((i%2)*10);s+=`<g><circle cx="${x}" cy="${y}" r="12" style="fill:var(--gcg);opacity:.55"/>${[[-4,-3],[4,-2],[0,4],[-5,5],[5,5]].map(([a,b])=>`<circle cx="${x+a}" cy="${y+b}" r="3" style="fill:var(--fat)"/>`).join('')}</g>`;}
+  // trapped LDL in the wall
+  for(let i=0;i<d.trap;i++){const x=PX-140+i*28+((i*37)%11),y=VC-LH+d.P*6-14-((i*13)%10);s+=ldlSVG(x,y,i%3===0&&layer!=='healthy');}
+  // endothelium cells with gaps
+  const gaps=Math.round(Math.max(0,d.dmg-.2)*10);const cells=[];for(let x=6;x<640;x+=22){cells.push(x);}
+  cells.forEach((x,i)=>{if(gaps&&(i%Math.max(2,Math.round(28/(gaps+1)))===0)&&i>4&&i<26)return;const y=innerTop(x+8,d);s+=`<rect x="${x}" y="${(y-5).toFixed(1)}" width="18" height="6" rx="3" style="fill:var(${d.dmg>.45?'--orange':'--teal'})"/>`;const yb=innerBot(x+8,d);s+=`<rect x="${x}" y="${(yb-1).toFixed(1)}" width="18" height="6" rx="3" style="fill:var(${d.dmg>.6?'--orange':'--teal'})"/>`;});
+  ves.wall.innerHTML=s;ves.d=d;vesselReadouts();
+  const steps=[['The lining (endothelium) is irritated by high glucose and makes less nitric oxide',.1],['LDL slips through the leaky lining and gets trapped in the wall',.2],['Glucose and its by-products stick to LDL (glycation): it is cleared less and grabbed by macrophages',.3],['Macrophages swallow the modified LDL and become foam cells',.4],['Foam cells pile up into a plaque with a fibrous cap',.55],['The wall thickens and sugar cross-links stiffen collagen and elastin, raising systolic blood pressure',.7]];
+  $('#v-steps').innerHTML=steps.map(([t,th],i)=>`<div class="step ${d.P>=th?'on-v':''}"><span class="n">${i+1}</span><div style="font-size:14.5px">${esc(t)}</div></div>`).join('');
+  $('#v-yrs-out').textContent=ves.yrs+(ves.yrs===1?' year':' years');
+  $('#vessel-text').textContent={healthy:'A healthy artery has a smooth lining that releases nitric oxide to relax the wall. Some stiffening and fatty streaks still come with age, but slowly.',
+   pre:'Even before diabetes, high insulin, higher glucose spikes and extra fat irritate the lining. Damage starts years before diagnosis.',
+   t2:'High glucose, high insulin, blood pressure, lipids and inflammation all act on the artery wall together, which is why heart disease risk is about twice as high.',
+   t1:'Years of high glucose damage the lining and stiffen the wall. Keeping glucose in range and treating blood pressure and lipids slows this down.'}[layer]+(ves.care?' Exercise and good care are slowing this down: aerobic plus resistance training improved lining function (FMD) by about 2.5% in type 2 diabetes.':'');}
+function ldlSVG(x,y,gly){return `<g><circle cx="${x}" cy="${y}" r="7" stroke-width="1.6" style="fill:var(--fat);stroke:var(--orange)"/>${gly?`<circle cx="${x-4}" cy="${y-5}" r="2.4" style="fill:var(--glu)"/><circle cx="${x+5}" cy="${y-3}" r="2.4" style="fill:var(--glu)"/><circle cx="${x+1}" cy="${y+6}" r="2.4" style="fill:var(--glu)"/>`:''}</g>`;}
+function glyFrac(){return clamp((G-5)/10,0,.5);}
+function vesselReadouts(){if(!ves.d)return;const d=ves.d;$('#vz-line').textContent=d.dmg<.2?'Healthy':d.dmg<.6?'Irritated':'Leaky';$('#vz-plq').textContent=d.plq<=0?(d.trap?'Fatty streak':'None'):d.plq<.5?'Plaque':'Large plaque';
+  $('#vz-wall').textContent=d.stiff<.25?'Flexible':d.stiff<.65?'Stiffening':'Stiff';const sbp=Math.round(118+30*d.stiff),dbp=Math.round(76+2*d.stiff);$('#vz-bp').textContent=sbp+'/'+dbp;$('#vz-gly').textContent=G<7?'Low':G<10?'Moderate':'High';$('#vz-open').textContent=Math.round(100-d.plq*42)+'%';}
+const VKIND={rbc:[10,'--rose'],glu:[0,'--glu'],ins:[0,'--ins'],ket:[0,'--ket'],ldl:[6,''],hdl:[4,'--surface']};
+function vSpawn(k){const d=ves.d,x=-10,mid=VC+(Math.random()-.5)*2*(LH-18);let c;
+  if(k==='rbc')c=S('ellipse',{rx:9,ry:5,style:'fill:var(--rose);opacity:.55'},ves.pG);
+  else if(k==='ldl'){c=S('g',{},ves.pG);c.innerHTML=ldlSVG(0,0,Math.random()<glyFrac());}
+  else if(k==='hdl')c=S('circle',{r:4.5,'stroke-width':1.5,style:'fill:var(--surface);stroke:var(--fat)'},ves.pG);
+  else c=S('circle',{r:k==='ins'?2.8:3.4,style:'fill:var('+VKIND[k][1]+')'},ves.pG);
+  ves.p.push({k,x,y:mid,v:70+Math.random()*30,c});}
+function vWant(k){if(k==='glu')return Math.round(G*2.2);if(k==='ins')return Math.round((layer==='t1'?(t1Low()?0:1):insOut())*5);if(k==='ket')return layer==='t1'?Math.round(1+ketV*5):0;return VKIND[k][0];}
+function stepVessel(dt){if(!ves.d)return;const d=ves.d;ves.t+=dt;
+  const amp=.045*(1-.8*d.stiff),beat=Math.pow(Math.max(0,Math.sin(ves.t*2*Math.PI*1.1)),3),dil=mapEx?(1+.04*(1-d.dmg)):1;
+  $('#v-pulse').setAttribute('transform',`translate(0 ${VC}) scale(1 ${(dil*(1+amp*beat)).toFixed(4)}) translate(0 ${-VC})`);
+  $('#v-no').textContent=mapEx?(d.dmg<.5?'Exercise: nitric oxide widens the artery':'Exercise: a damaged lining widens less'):'';
+  const sp=mapEx?1.6:1;
+  Object.keys(VKIND).forEach(k=>{const n=ves.p.filter(p=>p.k===k).length,want=vWant(k);ves.acc[k]=(ves.acc[k]||0)+dt*(want/6);if(n<want){while(ves.acc[k]>=1){ves.acc[k]-=1;vSpawn(k);}}else ves.acc[k]=0;});
+  ves.p=ves.p.filter(p=>{p.x+=p.v*sp*dt;const lo=innerTop(p.x,d)+8,hi=innerBot(p.x,d)-8;if(p.y<lo)p.y+=(lo-p.y)*.2;if(p.y>hi)p.y-=(p.y-hi)*.2;
+    if(p.k==='ldl'&&d.dmg>.15&&!p.e&&p.x>PX-160&&p.x<PX+120&&Math.random()<dt*d.dmg*.5){p.e=true;}
+    if(p.e){p.y-=40*dt;if(p.y<innerTop(p.x,d)-14){p.c.remove();return false;}}
+    if(p.x>660){p.c.remove();return false;}
+    if(p.c.tagName==='g')p.c.setAttribute('transform',`translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`);else{p.c.setAttribute('cx',p.x);p.c.setAttribute('cy',p.y);}return true;});
+  // monocytes entering the wall
+  if(d.foam>0&&Math.random()<dt*.35*d.foam){const x=PX-80+Math.random()*160;ves.ent.push({x,y:VC-20,c:S('circle',{cx:x,cy:VC-20,r:8,style:'fill:var(--gcg);opacity:.8'},ves.eG)});}
+  ves.ent=ves.ent.filter(m=>{m.y-=30*dt;m.c.setAttribute('cy',m.y);if(m.y<innerTop(m.x,d)-8){m.c.remove();return false;}return true;});}
+$('#v-yrs').addEventListener('input',e=>{ves.yrs=Number(e.target.value);store.set('vyrs',ves.yrs);syncVessel();});
+$('#v-care').addEventListener('change',e=>{ves.care=e.target.checked;syncVessel();});
+
+/* ===== glucose model (illustrative) ===== */
+const hfun=(x,tau)=>x<=0?0:(x/tau)*Math.exp(1-x/tau);
+const EXDUR={walk:.5,res:.75,hiit:1/3,none:0};
+const EXNAME={walk:'Brisk walk',res:'Resistance',hiit:'HIIT',none:'No exercise',pmw:'Walk after a meal'};
+function isInsUser(p){return p.type==='t1'||(p.type==='t2'&&(p.med==='su'||p.med==='ins'));}
+function exAcute(t,p,te,tend){if(p.ex==='none'||t<te)return 0;const dur=tend-te,u=Math.min(1,(t-te)/dur),after=t>tend?t-tend:0,ins=isInsUser(p);
+  const key=p.type==='t2'?p.med:p.type;
+  if(p.ex==='walk'){let D={healthy:.4,pre:.8,none:1.4,met:1.4,glp:1.4,sglt:1.4,su:2.4,ins:2.6,t1:3.4}[key];if(p.plan&&ins)D*=p.type==='t1'?.35:.5;
+    return t<=tend?-D*u:-D*Math.exp(-after/(ins?2.5:1.0));}
+  if(p.ex==='res'){let D={healthy:.2,pre:.4,none:.6,met:.6,glp:.6,sglt:.6,su:1.1,ins:1.2,t1:1.3}[key];if(p.plan&&ins)D*=.5;
+    return t<=tend?-D*.6*u:-D*(.6*Math.exp(-after/1.0)+.5*hfun(after*60,120));}
+  if(p.ex==='hiit'){let R={healthy:.5,pre:.8,none:1.2,met:1.2,glp:1.2,sglt:1.2,su:1.0,ins:1.0,t1:2.0}[key];if(p.plan&&p.type==='t1')R=1.4;
+    return t<=tend?R*u:R*Math.exp(-after/.7)-R*.6*hfun(after*60,150);}
+  return 0;}
+function simDay(p){const out=[];const t2base={none:9.6,met:8.4,glp:7.5,sglt:7.7,su:7.4,ins:7.1};
+  let base={healthy:5.0,pre:6.0,t2:t2base[p.med],t1:7.0}[p.type];
+  let sens={healthy:1,pre:.7,t2:.45,t1:1}[p.type];if(p.type==='t2'&&p.med==='glp')sens=.55;
+  const tr=1-Math.exp(-p.train/5);sens*=1+.35*tr;if(p.type==='pre'||p.type==='t2')base-=.7*tr;
+  if(p.sleep){sens*=.85;base+=p.type==='healthy'?.1:.3;}
+  const gain={healthy:.030,pre:.045,t2:.055,t1:.055}[p.type];let tau={healthy:40,pre:55,t2:75,t1:60}[p.type];
+  let gmul=1;if(p.type==='t2'&&p.med==='glp'){gmul=.7;tau*=1.2;}if(p.type==='t2'&&p.med==='sglt')gmul=.9;if(p.sit)gmul*=.9;
+  const meals=[1.5,6.5,12.5],te=p.ext-6,tend=te+EXDUR[p.ex],ins=isInsUser(p);
+  const amp={walk:.3,res:.25,hiit:.3,none:0}[p.ex];
+  const boost=t=>p.ex==='none'||t<te?0:t<tend?amp*(t-te)/(tend-te):amp*Math.exp(-(t-tend)/20);
+  for(let i=0;i<=288;i++){const t=i*5/60;let g=base;const h=(t+6)%24;
+    if((p.type==='t2'||p.type==='t1')&&h>=3&&h<9)g+=.6*Math.sin(Math.PI*(h-3)/6);
+    if(p.stress&&t>=2.5&&t<=13)g+={healthy:.2,pre:.4,t2:.8,t1:.8}[p.type];
+    meals.forEach((tm,k)=>{const x=(t-tm)*60;if(x<0)return;const se=sens*(1+boost(tm));let A=gain*p.carb*gmul*Math.pow(1/se,.6);if(k===2&&p.pmw)A*=.78;g+=A*hfun(x,tau);
+      if(p.type==='t1')g+=-p.bolus*A*.85*hfun(x-50,tau*1.7);});
+    g+=exAcute(t,p,te,tend);
+    if(p.ex!=='none'&&ins){const a=p.type==='t1'?(p.plan?.8:3.0):(p.med==='ins'?(p.plan?.5:1.4):(p.plan?.4:1.1));const c=te>=6?20:te+8;g-=a*Math.exp(-Math.pow((t-c)/2.2,2))*(p.ex==='res'?.8:1);}
+    if(p.pmw&&t>=13.25&&t<=13.6)g-=.25;
+    g+=(p.type==='t1'?.35:.12)*Math.sin(t*1.9+1)+(p.type==='t1'?.25:.08)*Math.sin(t*4.3);
+    if(p.type==='t1'&&p.aid){const tg=6.4;g=g>tg?tg+(g-tg)*.55:tg+(g-tg)*.6;}
+    out.push([t,clamp(g,2.2,22)]);}
+  return out;}
+function stats(pts){let n=pts.length,tir=0,tbr=0,tbr3=0,tar=0,sum=0;pts.forEach(([,g])=>{sum+=g;if(g<3.9){tbr++;if(g<3)tbr3++;}else if(g>10)tar++;else tir++;});const mean=sum/n;
+  return{tir:tir/n*100,tbr:tbr/n*100,tbr3:tbr3/n*100,tar:tar/n*100,mean,gmi:3.31+.02392*mean*18.016};}
+
+/* ===== glucose day view ===== */
+const day=Object.assign({type:'t2',med:'met',aid:false,bolus:0,carb:60,ex:'walk',ext:17,plan:false,pmw:false,sit:false,sleep:false,stress:false,train:0},store.get('day',{}));
+const clock=h=>{const hh=Math.floor(h)%24,mm=Math.round((h%1)*60);return String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');};
+function syncDayCtl(){segSet('#day-type','data-t',day.type);$('#day-med').value=day.med;segSet('#day-aid','data-aid',day.aid?'aid':'mdi');$('#day-bolus').value=day.bolus;$('#day-carb').value=day.carb;$('#day-ex').value=day.ex;$('#day-ext').value=day.ext;
+  ['plan','pmw','sit','sleep','stress'].forEach(k=>$('#day-'+k).checked=day[k]);$('#day-train').value=day.train;}
+function renderDay(){if(view!=='day')return;const p=day;store.set('day',p);
+  $('#day-med-wrap').hidden=p.type!=='t2';$('#day-t1-wrap').hidden=p.type!=='t1';$('#day-ext-wrap').hidden=p.ex==='none';
+  $('#day-plan-wrap').hidden=!(isInsUser(p)&&p.ex!=='none');
+  $('#day-bolus-out').textContent={'-1':'Much too little','-0.5':'A bit too little','0':'Matched','0.5':'A bit too much','1':'Much too much'}[String(p.bolus)];
+  $('#day-carb-out').textContent=p.carb+' g';$('#day-ext-out').textContent=clock(p.ext);$('#day-train-out').textContent=p.train?p.train+' weeks':'Not yet';
+  const pts=simDay(p),s=stats(pts);
+  const medTxt={none:'no medicines',met:'metformin',glp:'metformin + GLP-1 RA',sglt:'metformin + SGLT2 inhibitor',su:'metformin + sulfonylurea',ins:'metformin + basal insulin'};
+  $('#day-title').textContent=LAYER_NAME[p.type]+(p.type==='t2'?' · '+medTxt[p.med]:'')+(p.type==='t1'?' · '+(p.aid?'automated delivery':'injections or pump'):'')+' · '+(p.ex==='none'?'no exercise':EXNAME[p.ex].toLowerCase()+' at '+clock(p.ext));
+  $('#d-tir').textContent=Math.round(s.tir)+'%';$('#d-tbr').textContent=s.tbr.toFixed(1)+'%';$('#d-tar').textContent=Math.round(s.tar)+'%';$('#d-mean').textContent=s.mean.toFixed(1);$('#d-gmi').textContent=s.gmi.toFixed(1)+'%';
+  $('#d-tir').style.color=s.tir>=70?'var(--ok)':'var(--warn)';$('#d-tbr').style.color=s.tbr>=4?'var(--bad)':'var(--head)';
+  $('#d-bar').innerHTML=`<div style="width:${s.tbr}%;background:var(--rose)"></div><div style="width:${s.tir}%;background:var(--teal)"></div><div style="width:${s.tar}%;background:var(--orange)"></div>`;
+  drawDay(pts,p);
+  const notes=[];const ins=isInsUser(p);
+  if(s.tbr>=4)notes.push(['rose','Too many lows',`${s.tbr.toFixed(1)}% of the day is below 3.9. With ${p.type==='t1'?'insulin':'insulin or a sulfonylurea'}, exercise keeps lowering glucose for hours, often overnight. Ask: what happened later that evening and overnight?`]);
+  if(p.ex!=='none'&&ins&&!p.plan&&s.tbr<4)notes.push(['orange','Watch the night',`Exercise with ${p.type==='t1'?'insulin':'insulin or a sulfonylurea'} raises the chance of a delayed low. Tick "Diabetes plan adjusted" to see what planning does.`]);
+  if(p.ex==='hiit')notes.push(['','Why HIIT pushed glucose up','Adrenaline tells the liver to release glucose faster than muscle uses it. The rise is expected and usually settles within an hour or two.']);
+  if(p.pmw)notes.push(['','The walk after dinner','A short walk soon after eating trims that meal\'s peak. Light walking breaks lowered glucose about 17% compared with sitting (Buffey 2022).']);
+  if(p.type==='t1'&&p.bolus>0)notes.push(['rose','Too much meal insulin','Glucose drops below range a couple of hours after meals.']);
+  if(p.type==='t1'&&p.bolus<0)notes.push(['orange','Too little meal insulin','Glucose stays high for hours after meals.']);
+  if(p.sleep||p.stress)notes.push(['orange','Sleep and stress count','Short sleep and stress hormones raise glucose and make insulin work less well. This is the BPS layer in action.']);
+  if(p.train>0&&(p.type==='t2'||p.type==='pre'))notes.push(['','Training changes the system',`After ${p.train} weeks, muscle responds better to insulin and fasting glucose is lower, even on days without a session.`]);
+  if(!notes.length)notes.push(['','Read the response, not your assumption',s.tir>=70?'Most of this day sits in range. Try a different meal size, exercise type or person.':'Much of this day sits above range. Try a walk after dinner, breaking up sitting, or weeks of training.']);
+  const [c,h,tx]=notes[0];const host=$('#day-note');host.className='callout '+c;host.innerHTML=`<strong>${esc(h)}</strong><p>${esc(tx)}</p>`+(notes[1]?`<p class="tiny" style="margin-top:6px"><b>${esc(notes[1][1])}:</b> ${esc(notes[1][2])}</p>`:'');}
+function drawDay(pts,p){const svg=$('#day-svg'),W=760,H=320,L=48,R=30,T=30,B=36;const X=t=>L+t/24*(W-L-R),Y=g=>T+(1-(g-2)/(20-2))*(H-T-B);
+  let s='';
+  s+=`<rect x="${X(16)}" y="${T}" width="${X(24)-X(16)}" height="${H-T-B}" style="fill:var(--surface-2);opacity:.6"/>`;
+  s+=`<text x="${X(20)}" y="${T+14}" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">Overnight</text>`;
+  s+=`<rect x="${L}" y="${Y(10)}" width="${W-L-R}" height="${Y(3.9)-Y(10)}" style="fill:var(--teal-soft)"/>`;
+  [3.9,10].forEach(v=>s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke-width="1" style="stroke:var(--teal)" stroke-dasharray="4 3"/>`);
+  s+=`<line x1="${L}" x2="${W-R}" y1="${Y(3)}" y2="${Y(3)}" stroke-width="1" style="stroke:var(--rose)" stroke-dasharray="2 4"/>`;
+  [3.9,10,15,20].forEach(v=>s+=`<text x="${L-6}" y="${Y(v)+4}" text-anchor="end" font-size="11.5" style="fill:var(--muted);font-family:var(--f-mono)">${v}</text>`);
+  s+=`<text x="${L-6}" y="${Y(3)+4}" text-anchor="end" font-size="11" style="fill:var(--rose);font-family:var(--f-mono)">3.0</text>`;
+  s+=`<text x="4" y="16" font-size="11.5" style="fill:var(--muted)">mmol/L</text>`;
+  for(let h=0;h<=24;h+=3){s+=`<line x1="${X(h)}" x2="${X(h)}" y1="${H-B}" y2="${H-B+5}" style="stroke:var(--line)"/><text x="${X(h)}" y="${H-B+19}" text-anchor="middle" font-size="11.5" style="fill:var(--muted);font-family:var(--f-mono)">${clock(h+6)}</text>`;}
+  s+=`<line x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}" style="stroke:var(--line)"/>`;
+  [[1.5,'Breakfast'],[6.5,'Lunch'],[12.5,'Dinner']].forEach(([t,n])=>s+=`<path d="M${X(t)-5} ${T-10}h10l-5 7z" style="fill:var(--head)"/><text x="${X(t)}" y="${T-14}" text-anchor="middle" font-size="11.5" style="fill:var(--head)">${n}</text>`);
+  if(p.ex!=='none'){const te=p.ext-6,te2=te+EXDUR[p.ex];s+=`<rect x="${X(te)}" y="${H-B-12}" width="${Math.max(6,X(te2)-X(te))}" height="10" rx="3" style="fill:var(--teal)"/><text x="${X(te2)+6}" y="${H-B-3}" font-size="11.5" font-weight="700" style="fill:var(--teal)">${EXNAME[p.ex]}</text>`;}
+  if(p.pmw)s+=`<rect x="${X(13.25)}" y="${H-B-12}" width="${X(13.42)-X(13.25)+4}" height="10" rx="3" style="fill:var(--teal);opacity:.6"/>`;
+  // coloured trace
+  const cat=g=>g<3.9?'rose':g>10?'orange':'teal';let run=[],cur=null;const runs=[];
+  pts.forEach(([t,g],i)=>{const c=cat(g);if(c!==cur&&run.length){run.push([t,g]);runs.push([cur,run]);run=[];}cur=c;run.push([t,g]);});runs.push([cur,run]);
+  runs.forEach(([c,r])=>s+=`<polyline fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--${c})" points="${r.map(([t,g])=>X(t).toFixed(1)+','+Y(g).toFixed(1)).join(' ')}"/>`);
+  s+=`<g id="day-hover" style="display:none"><line id="dh-l" y1="${T}" y2="${H-B}" style="stroke:var(--muted)" stroke-dasharray="3 3"/><circle id="dh-c" r="5" style="fill:var(--head)"/><rect id="dh-r" width="104" height="22" rx="5" style="fill:var(--head)"/><text id="dh-t" font-size="12" style="fill:var(--bg);font-family:var(--f-mono)"></text></g>`;
+  svg.innerHTML=s;svg._pts=pts;svg._X=X;svg._Y=Y;}
+(function(){const svg=$('#day-svg');svg.addEventListener('pointermove',e=>{const pts=svg._pts;if(!pts)return;const r=svg.getBoundingClientRect();const x=(e.clientX-r.left)/r.width*760;const t=clamp((x-48)/(760-78)*24,0,24);const i=Math.round(t*12);const [tt,g]=pts[i];const X=svg._X(tt),Y=svg._Y(g);
+  $('#day-hover').style.display='';$('#dh-l').setAttribute('x1',X);$('#dh-l').setAttribute('x2',X);$('#dh-c').setAttribute('cx',X);$('#dh-c').setAttribute('cy',Y);const bx=X>620?X-112:X+8;$('#dh-r').setAttribute('x',bx);$('#dh-r').setAttribute('y',Y-30);$('#dh-t').setAttribute('x',bx+8);$('#dh-t').setAttribute('y',Y-15);$('#dh-t').textContent=clock(tt+6)+'  '+g.toFixed(1);});
+  svg.addEventListener('pointerleave',()=>{const h=$('#day-hover');if(h)h.style.display='none';});})();
+segBind('#day-type','data-t',v=>{day.type=v;renderDay();});
+segBind('#day-aid','data-aid',v=>{day.aid=v==='aid';renderDay();});
+$('#day-med').addEventListener('change',e=>{day.med=e.target.value;renderDay();});
+$('#day-ex').addEventListener('change',e=>{day.ex=e.target.value;renderDay();});
+[['bolus',parseFloat],['carb',Number],['ext',parseFloat],['train',Number]].forEach(([k,f])=>$('#day-'+k).addEventListener('input',e=>{day[k]=f(e.target.value);renderDay();}));
+['plan','pmw','sit','sleep','stress'].forEach(k=>$('#day-'+k).addEventListener('change',e=>{day[k]=e.target.checked;renderDay();}));
+
+/* ===== exercise lens ===== */
+const lens=Object.assign({w:'during',x:'walk',p:'t2',min:150,res:2,wk:12,stop:false},store.get('lens',{}));
+const LENS_P={pre:{type:'pre',med:'met',g0:6.2,n:'Prediabetes'},t2:{type:'t2',med:'met',g0:8.5,n:'Type 2, metformin'},t2i:{type:'t2',med:'ins',g0:8.0,n:'Type 2, insulin or sulfonylurea'},t1:{type:'t1',med:'met',g0:8.2,n:'Type 1'}};
+function lineChart(svg,o){const W=760,H=320,L=o.L||56,R=o.R||34,T=26,B=40;const X=v=>L+(v-o.x[0])/(o.x[1]-o.x[0])*(W-L-R),Y=v=>T+(1-(v-o.y[0])/(o.y[1]-o.y[0]))*(H-T-B);let s='';
+  (o.xbands||[]).forEach(b=>{s+=`<rect x="${X(b.a)}" y="${T}" width="${X(b.b)-X(b.a)}" height="${H-T-B}" style="fill:var(${b.fill});opacity:${b.op||1}"/>`;if(b.label)s+=`<text x="${X(b.a)+6}" y="${T+14}" font-size="11.5" font-weight="700" style="fill:var(${b.ink||'--muted'})">${esc(b.label)}</text>`;});
+  (o.ybands||[]).forEach(b=>{s+=`<rect x="${L}" y="${Y(b.b)}" width="${W-L-R}" height="${Y(b.a)-Y(b.b)}" style="fill:var(${b.fill})"/>`;});
+  (o.ylines||[]).forEach(l=>s+=`<line x1="${L}" x2="${W-R}" y1="${Y(l.v)}" y2="${Y(l.v)}" stroke-dasharray="4 3" style="stroke:var(${l.c||'--line'})"/>`);
+  o.yt.forEach(v=>s+=`<text x="${L-8}" y="${Y(v)+4}" text-anchor="end" font-size="11.5" style="fill:var(--muted);font-family:var(--f-mono)">${o.yf?o.yf(v):v}</text>`);
+  o.xt.forEach(v=>s+=`<line x1="${X(v)}" x2="${X(v)}" y1="${H-B}" y2="${H-B+5}" style="stroke:var(--line)"/><text x="${X(v)}" y="${H-B+19}" text-anchor="middle" font-size="11.5" style="fill:var(--muted);font-family:var(--f-mono)">${o.xf?o.xf(v):v}</text>`);
+  s+=`<line x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}" style="stroke:var(--line)"/><line x1="${L}" x2="${L}" y1="${T}" y2="${H-B}" style="stroke:var(--line)"/>`;
+  if(o.ylab)s+=`<text x="${L}" y="16" font-size="11.5" style="fill:var(--muted)">${esc(o.ylab)}</text>`;
+  if(o.xlab)s+=`<text x="${W-R}" y="${H-6}" text-anchor="end" font-size="11.5" style="fill:var(--muted)">${esc(o.xlab)}</text>`;
+  o.series.forEach(se=>{s+=`<polyline fill="none" stroke-width="${se.w||3}" stroke-linejoin="round" stroke-linecap="round" ${se.dash?'stroke-dasharray="7 5"':''} style="stroke:var(${se.c})" points="${se.pts.map(([a,b])=>X(a).toFixed(1)+','+Y(clamp(b,o.y[0],o.y[1])).toFixed(1)).join(' ')}"/>`;
+    if(se.label){const [a,b]=se.pts[se.pts.length-1];s+=`<text x="${X(a)-4}" y="${Y(clamp(b,o.y[0],o.y[1]))+(se.ly||-10)}" text-anchor="end" font-size="12" font-weight="700" style="fill:var(${se.c})">${esc(se.label)}</text>`;}});
+  (o.marks||[]).forEach(m=>{s+=`<line x1="${X(m.x)}" x2="${X(m.x)}" y1="${T}" y2="${H-B}" stroke-dasharray="3 3" style="stroke:var(--muted)"/>`;if(m.y!=null)s+=`<circle cx="${X(m.x)}" cy="${Y(m.y)}" r="5.5" style="fill:var(--head)"/>`;if(m.label)s+=`<text x="${X(m.x)+(m.left?-6:6)}" y="${T+30}" ${m.left?'text-anchor="end"':''} font-size="11.5" style="fill:var(--muted)">${esc(m.label)}</text>`;});
+  svg.innerHTML=s;}
+function renderLens(){if(view!=='exercise')return;store.set('lens',lens);const P=LENS_P[lens.p],ins=lens.p==='t2i'||lens.p==='t1';
+  $('#lens-type-wrap').hidden=lens.w==='adapted';$('#lens-adapt-ctl').hidden=lens.w!=='adapted';
+  $$('#lens-type button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.x===lens.x)));$$('#lens-who button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p===lens.p)));
+  segSet('#lens-win','data-w',lens.w);
+  const svg=$('#lens-svg');let cards=[],meters=[],note=['',''],tag=TAG.illus;
+  if(lens.w==='during'){
+    if(lens.x==='pmw'){const p={type:P.type,med:P.med};const sens={pre:.7,t2:.45,t1:1}[P.type]||.45,gain={pre:.045,t2:.055,t1:.055}[P.type],tau={pre:55,t2:75,t1:60}[P.type];
+      const A=gain*60*Math.pow(1/sens,.6);const a=[],b=[];for(let m=0;m<=180;m+=3){const base=P.g0-.6+A*hfun(m,tau);a.push([m,base]);b.push([m,P.g0-.6+A*.78*hfun(m,tau)-(m>=10&&m<=25?.25*Math.sin(Math.PI*(m-10)/15):0)]);}
+      lineChart(svg,{x:[0,180],y:[4,16],xt:[0,30,60,90,120,150,180],xf:v=>v+' min',yt:[4,6,8,10,12,14,16],ylab:'Glucose, mmol/L',xlab:'Minutes after the meal',ybands:[{a:3.9,b:10,fill:'--teal-soft'}],xbands:[{a:10,b:25,fill:'--teal-soft',op:.9,label:'10–15 min walk',ink:'--teal'}],
+        series:[{pts:a,c:'--orange',label:'Sitting after the meal'},{pts:b,c:'--teal',label:'Walking soon after',ly:18}]});
+      $('#lens-title').textContent='A short walk soon after eating';tag=TAG.moderate;
+      meters=[['Peak lowered','about 20%','Illustrative'],['Best time','soon after eating','Spikes peak 60–90 min'],['Dose','2–15 min','light pace']];
+      cards=[['Muscle','Contracting muscle pulls in glucose from the meal as it arrives.'],['Meal spike','The rise is smaller and shorter, which matters for vessels and for how the person feels.'],['Low friction','No change of clothes, no gym. A good first step for busy people like Kevin.']];
+      note=['','Light walking breaks lowered glucose about 17% compared with sitting in a meta-analysis of 7 studies (Buffey 2022).'];}
+    else{const te=.25,dur=EXDUR[lens.x],tend=te+dur,mk=(plan)=>{const a=[];for(let m=0;m<=150;m+=2){const t=m/60;a.push([m,P.g0+exAcute(t,{ex:lens.x,type:P.type,med:P.med,plan},te,tend)]);}return a;};
+      const s1=mk(false),ser=[{pts:s1,c:'--head',label:ins?'No changes to the plan':'Glucose'}];if(ins)ser.push({pts:mk(true),c:'--teal',dash:true,label:'Plan adjusted',ly:18});
+      const all=ser.flatMap(x=>x.pts.map(q=>q[1]));const lo=Math.max(2,Math.floor(Math.min(...all)-1)),hi=Math.min(18,Math.ceil(Math.max(...all)+1.5));
+      lineChart(svg,{x:[0,150],y:[lo,hi],xt:[0,30,60,90,120,150],xf:v=>v+' min',yt:[...Array(hi-lo+1).keys()].map(k=>k+lo).filter(v=>v%2===0),ylab:'Glucose, mmol/L',xlab:'Minutes',ybands:[{a:Math.max(lo,3.9),b:Math.min(hi,10),fill:'--teal-soft'}],ylines:lo<3.9?[{v:3.9,c:'--rose'}]:[],xbands:[{a:15,b:15+dur*60,fill:'--surface-2',op:.9,label:EXNAME[lens.x]}],series:ser});
+      const drop=s1[Math.round((tend*60)/2)][1]-P.g0;
+      $('#lens-title').textContent=EXNAME[lens.x]+' · '+P.n;tag=TAG.strong;
+      meters=[['Change by the end',(drop>0?'+':'')+drop.toFixed(1)+' mmol/L','Illustrative'],['Pattern',lens.x==='walk'?'Steady fall':lens.x==='res'?'Stable, later fall':'Rise, then fall',''],['Low risk',ins?'Higher':'Low',ins?'Insulin cannot switch off':'Body cuts its own insulin']];
+      cards=lens.x==='walk'?[['Muscle','Contraction moves GLUT4 doors to the surface and pulls in glucose, with or without insulin.'],['Liver','Releases glucose to match. With injected insulin it cannot keep up, so glucose falls faster.'],['Hormones','Your own insulin falls during the walk. Injected insulin does not, which is where lows come from.']]
+        :lens.x==='res'?[['Muscle','Intermittent effort uses stored glycogen. Glucose often holds steady during the session.'],['Later','Glucose can fall in the hours after as muscle refills its glycogen.'],['Order','In type 1, doing resistance before cardio limits the drop (Riddell 2017).']]
+        :[['Adrenaline','Hard efforts release adrenaline and other hormones that tell the liver to release glucose fast.'],['During','Glucose often rises. This is expected, not dangerous on its own.'],['After','It usually settles in an hour or two, and can fall later on. Avoid over-correcting a post-HIIT high.']];
+      note=ins?['orange','For insulin users: plan with the diabetes team (less meal insulin before, carbohydrate during, a check afterwards). The dashed line shows what planning does.']:['','Without insulin or a sulfonylurea, the body lowers its own insulin as muscle takes over, so lows are uncommon.'];}
+  }
+  if(lens.w==='after'){const amp={walk:30,res:25,hiit:30,pmw:10}[lens.x];const a=[];for(let t=0;t<=48;t+=.5)a.push([t,amp*(1-Math.exp(-t/.7))*Math.exp(-t/20)]);
+    lineChart(svg,{x:[0,48],y:[0,40],xt:[0,6,12,18,24,30,36,42,48],xf:v=>v+' h',yt:[0,10,20,30,40],yf:v=>'+'+v+'%',ylab:'Insulin sensitivity above baseline (illustrative)',xlab:'Hours after the session',
+      xbands:ins?[{a:5,b:13,fill:'--rose-soft',op:.9,label:'Delayed low risk',ink:'--rose'}]:[],series:[{pts:a,c:'--teal',label:'Muscle more sensitive to insulin',ly:-12}],marks:[{x:48,label:'Next session by here',left:true}]});
+    $('#lens-title').textContent='The 48 hours after one '+EXNAME[lens.x].toLowerCase();tag=TAG.strong;
+    meters=[['Lasts','up to 24–48 h','then fades'],['Guideline','≤2 days off','in a row'],['Delayed lows',ins?'Overnight':'Uncommon',ins?'After afternoon sessions':'']];
+    cards=[['Glycogen refill','Muscle refills its glucose stores after the session and keeps pulling glucose in.'],['Insulin works better','The same insulin opens more GLUT4 doors for up to about 48 hours, then the effect fades.'],['Blood pressure','Blood pressure stays a little lower for hours after a session.']];
+    note=ins?['rose','Ask what happened later that afternoon, evening and overnight, not just what glucose was when they left the gym. If the session was at 5 pm, the shaded band is overnight.']:['','This is why regularity matters more than any single hard session. The effect fades, so top it up by moving at least every second day.'];}
+  if(lens.w==='adapted'){$('#ad-min-out').textContent=lens.min+' min';$('#ad-res-out').textContent=lens.res+(lens.res===1?' session':' sessions');$('#ad-wk-out').textContent='Week '+lens.wk;$('#ad-stop').checked=lens.stop;
+    const a=.92*(1-Math.exp(-lens.min/115)),b=.08*lens.res,total=Math.min(.95,a+b-a*b);const sc=lens.p==='pre'?.35:lens.p==='t1'?0:1;
+    const eff=w=>{const st=lens.stop?12:99;const up=x=>total*(1-Math.exp(-x/5));return w<=st?up(w):up(st)*Math.exp(-(w-st)/6);};
+    const pts=[];for(let w=0;w<=24;w+=.5)pts.push([w,-eff(w)*sc]);
+    if(lens.p==='t1'){lineChart(svg,{x:[0,24],y:[-1,0.2],xt:[0,4,8,12,16,20,24],xf:v=>'wk '+v,yt:[0,-.25,-.5,-.75,-1],yf:v=>(v>0?'+':'')+v.toFixed(2),ylab:'Change in HbA1c, %',xlab:'Weeks of training',series:[{pts,c:'--muted',dash:true,label:'HbA1c effect unclear in type 1',ly:-12}],marks:[{x:lens.wk}]});}
+    else lineChart(svg,{x:[0,24],y:[-1,0.1],xt:[0,4,8,12,16,20,24],xf:v=>'wk '+v,yt:[0,-.25,-.5,-.75,-1],yf:v=>v.toFixed(2),ylab:'Change in HbA1c, %',xlab:'Weeks of training',xbands:lens.stop?[{a:12,b:24,fill:'--orange-soft',op:.8,label:'Training stopped',ink:'--orange'}]:[],series:[{pts,c:'--teal',label:'HbA1c change'}],marks:[{x:lens.wk,y:-eff(lens.wk)*sc}]});
+    const f=w=>{const st=lens.stop?12:99;const k=x=>1-Math.exp(-x/6);return w<=st?k(w):k(st)*Math.exp(-(w-st)/5);};const g=f(lens.wk);
+    $('#lens-title').textContent='Training changes the system · '+P.n;tag=TAG.strong+' '+TAG.illus;
+    meters=[['HbA1c',lens.p==='t1'?'unclear':(-eff(lens.wk)*sc).toFixed(2)+'%','at week '+lens.wk],['Fitness','+'+Math.round(15*Math.min(1.6,lens.min/150)*g)+'%','VO₂peak, illustrative'],['Strength','+'+Math.round(25*(lens.res/2)*g)+'%','illustrative'],['Insulin sensitivity','+'+Math.round(30*total*g)+'%','illustrative']];
+    cards=[['Muscle','More mitochondria, more GLUT4, more capillaries and more muscle. A bigger, better glucose store.'],['Liver and fat','Liver fat and visceral fat fall, so fasting glucose comes down.'],['Confidence','Greater self-efficacy and a more sustainable relationship with movement.']];
+    note=lens.p==='t1'?['','In type 1, HbA1c data are unclear, but time in range improves and heart, fitness and mood benefits are clear (ADA 2026).']:lens.p==='pre'?['','In prediabetes the goal is prevention: lifestyle change cut new cases of type 2 diabetes by 58% over about 3 years (DPP).']:['','Structured exercise lowers HbA1c by about 0.67% on average, and 0.89% with more than 150 minutes a week (Umpierre 2011). Stop training and the gains fade.'];}
+  $('#lens-tag').innerHTML=tag;
+  $('#lens-meters').innerHTML=meters.map(([a,b,c])=>`<div class="ro"><b>${esc(b)}</b><span>${esc(a)}${c?' · '+esc(c):''}</span></div>`).join('');
+  $('#lens-cards').innerHTML=cards.map(([h,t])=>`<div class="callout navy"><strong>${esc(h)}</strong><p>${esc(t)}</p></div>`).join('');
+  const n=$('#lens-note');n.className='callout '+note[0];n.innerHTML=`<p>${esc(note[1])}</p>`;}
+segBind('#lens-win','data-w',v=>{lens.w=v;renderLens();});
+$('#lens-type').addEventListener('click',e=>{const b=e.target.closest('[data-x]');if(b){lens.x=b.dataset.x;renderLens();}});
+$('#lens-who').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b){lens.p=b.dataset.p;renderLens();}});
+[['min','ad-min'],['res','ad-res'],['wk','ad-wk']].forEach(([k,id])=>$('#'+id).addEventListener('input',e=>{lens[k]=Number(e.target.value);renderLens();}));
+$('#ad-stop').addEventListener('change',e=>{lens.stop=e.target.checked;renderLens();});
+
+/* ===== safety: medicines ===== */
+const MEDS=[
+ {id:'met',n:'Metformin',r:1,t:'Usually no glucose-specific change for exercise. Stomach upset is common early on.'},
+ {id:'dpp',n:'Gliptin (DPP-4 inhibitor)',r:1,t:'Low risk of lows on its own.'},
+ {id:'glp',n:'GLP-1 RA or tirzepatide',r:1,t:'Low risk of lows on its own. Watch appetite, intake, nausea and hydration. Prioritise resistance training: up to about 39% of weight lost on semaglutide was lean mass (STEP-1), and the ADA now recommends muscle strengthening with obesity medicines.'},
+ {id:'sglt',n:'SGLT2 inhibitor',r:1,t:'Low risk of lows on its own. Keep hydrated. Ketoacidosis can happen with near-normal glucose: prolonged or vigorous exercise, dehydration and low-carb diets raise the risk. Symptoms mean check ketones, whatever the glucose.'},
+ {id:'su',n:'Sulfonylurea (e.g. gliclazide)',r:3,t:'Higher risk of lows during and after exercise. Check glucose before and after, and carry fast carbohydrate.'},
+ {id:'ins',n:'Insulin: injections or pump',r:4,t:'High risk. Needs individual planning of glucose, carbohydrate and insulin with the diabetes team. Lows can come hours later, often overnight.'},
+ {id:'aid',n:'Insulin: automated delivery',r:3,t:'Lower than injections, not zero. The exercise or higher target is usually set 1–2 hours before (EASD/ISPAD 2025). Still carry fast carbohydrate.'}
+];
+let medSel=new Set(['met','glp']);
+function renderMeds(){$('#med-chips').innerHTML=MEDS.map(m=>`<button data-m="${m.id}" aria-pressed="${medSel.has(m.id)}">${esc(m.n)}</button>`).join('');
+  const sel=MEDS.filter(m=>medSel.has(m.id));let r=sel.reduce((a,m)=>Math.max(a,m.r),0);if(medSel.has('su')&&(medSel.has('ins')||medSel.has('aid')))r=4;
+  const lab=['None selected','Low','Low','Higher','High'][r],cls=['','ok','ok','warn','bad'][r];
+  $('#med-risk').textContent=lab;$('#med-risk').className='pill '+cls;
+  $('#med-meter').style.width=(r/4*100)+'%';$('#med-meter').style.background=r>=4?'var(--rose)':r>=3?'var(--orange)':'var(--teal)';
+  $('#med-notes').innerHTML=sel.map(m=>`<div class="callout ${m.r>=4?'rose':m.r>=3?'orange':''}"><strong>${esc(m.n)}</strong><p>${esc(m.t)}</p></div>`).join('')+(r<=2&&sel.length?`<p class="tiny">Kevin takes metformin and semaglutide. These do not carry the same exercise-low risk as insulin. Do not make every person with type 2 diabetes afraid of lows.</p>`:'');}
+$('#med-chips').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const id=b.dataset.m;medSel.has(id)?medSel.delete(id):medSel.add(id);renderMeds();});
+
+/* ===== safety: hypo steps ===== */
+const HYPO=[
+ ['Recognise and stop','Shaky, sweaty, hungry, dizzy, headache, hard to concentrate or confused. Glucose below 4.0 mmol/L is a hypo; if you cannot check, treat it as one. Stop exercising.'],
+ ['Treat with about 15 g fast carbohydrate','4 glucose tablets, 6–7 regular jellybeans, 150 mL regular soft drink or 125 mL fruit juice.'],
+ ['Wait 10–15 minutes and recheck','Still below 4? Repeat step 2. A CGM can lag behind, so confirm with a finger-prick if you can.'],
+ ['Recover with about 15 g slower carbohydrate','A slice of bread, a glass of milk or a piece of fruit, unless the next meal is within 15–20 minutes.'],
+ ['Review','Watch for another low later today and overnight. Note what happened so the person and their diabetes team can plan the next session.']
+];
+let hypoStep=0;
+function renderHypo(){$('#hypo-steps').innerHTML=HYPO.map(([h,t],i)=>`<div class="step ${i===hypoStep?'on':i<hypoStep?'done':''}"><span class="n">${i+1}</span><div><b>${esc(h)}</b>${i===hypoStep?`<p style="font-size:14.5px">${esc(t)}</p>`:''}</div></div>`).join('')+
+  `<div class="callout rose"><strong>Severe: they need someone's help</strong><p>Confused, drowsy, can't swallow or unconscious: recovery position, glucagon if available and you are trained, nothing by mouth, call 000.</p></div>`;
+  $('#hypo-prev').disabled=hypoStep===0;$('#hypo-next').disabled=hypoStep===HYPO.length-1;}
+$('#hypo-next').addEventListener('click',()=>{hypoStep=Math.min(HYPO.length-1,hypoStep+1);renderHypo();});
+$('#hypo-prev').addEventListener('click',()=>{hypoStep=Math.max(0,hypoStep-1);renderHypo();});
+$('#hypo-reset').addEventListener('click',()=>{hypoStep=0;renderHypo();});
+
+/* ===== safety: T1D pre-exercise ===== */
+const t1c={g:8,k:0,x:'aer',sev:false};
+function renderT1(){const g=t1c.g;$('#t1-g-out').textContent=g.toFixed(1)+' mmol/L';$('#t1-k-wrap').style.opacity=g>15?1:.45;$$('#t1-k button').forEach(b=>b.disabled=g<=15);
+  let c,h,t;
+  if(t1c.sev){c='stop';h='Do not exercise today';t='A severe hypo in the last 24 hours makes another one more likely. Rest, and review with the diabetes team.';}
+  else if(g<5){c='adjust';h='Raise glucose first';t='Take 10–20 g of glucose and wait until glucose is above 5 mmol/L before starting. Monitor closely.';}
+  else if(g<7){c=t1c.x==='aer'?'adjust':'go';h=t1c.x==='aer'?'Start after a small top-up':'You can start';t=t1c.x==='aer'?'Take about 10 g of carbohydrate before aerobic exercise.':'HIIT and resistance can start; they tend to push glucose up.';}
+  else if(g<=15){c='go';h='You can start';t=t1c.x==='aer'?'7–10 mmol/L is a good starting range for aerobic exercise. Keep checking during the session.':'Glucose may rise during HIIT or heavy resistance work. Avoid over-correcting a high afterwards.';}
+  else{if(t1c.k===0){c='adjust';h='Find out why it is high';t='If the high is unexplained, check ketones. Below 0.6: light to moderate exercise is OK. Keep checking glucose during the session.';}
+    else if(t1c.k===1){c='adjust';h='Light exercise only';t='Ketones 0.6–1.4: light exercise only, under 30 minutes, possibly after a small correction dose from the person\'s plan.';}
+    else if(t1c.k===2){c='stop';h='Do not exercise';t='Blood ketones of 1.5 or more: address the ketones and high glucose first, following the diabetes plan.';}
+    else{c='stop';h='Urgent medical care';t='Blood ketones of 3.0 or more need immediate medical management.';}}
+  $('#t1-out').className='outcome '+c;$('#t1-out').innerHTML=`<span class="eyebrow">${c==='go'?'Go':c==='adjust'?'Adjust first':'Stop'}</span><b>${esc(h)}</b><p style="font-size:14.5px">${esc(t)}</p>`;}
+$('#t1-g').addEventListener('input',e=>{t1c.g=parseFloat(e.target.value);renderT1();});
+segBind('#t1-k','data-k',v=>{t1c.k=Number(v);renderT1();});
+segBind('#t1-x','data-x',v=>{t1c.x=v;renderT1();});
+$('#t1-sev').addEventListener('change',e=>{t1c.sev=e.target.checked;renderT1();});
+
+/* ===== safety: complications ===== */
+const COMP=[
+ ['Peripheral neuropathy','Feet, sensation, skin, footwear, gait and balance.','Weight-bearing exercise can still suit when skin is intact and loading is safe. Check feet daily, choose shoes and socks carefully, and use cycling, chair work or swimming if there is an open wound (no water with an unhealed ulcer).'],
+ ['Retinopathy','Severity, recent eye procedures, specialist advice.','With unstable proliferative or severe retinopathy, or recent laser treatment, avoid vigorous work, breath-holding, heavy lifting, head-down positions and jarring. Check with the ophthalmologist.'],
+ ['Autonomic neuropathy','Heart rate response, blood pressure, standing up, heat, hydration.','Heart rate may not rise normally, so use RPE. Warm up and cool down gradually, watch for drops in blood pressure on standing, and manage heat and fluids.'],
+ ['Kidney disease','Disease stage, blood pressure, symptoms, treatment.','Individualise intensity rather than defaulting to "light only". Avoid big blood-pressure spikes and breath-holding. Light to moderate exercise is possible even during dialysis if electrolytes are managed.'],
+ ['High blood pressure and heart disease','Resting BP, symptoms, cardiac history, medicines.','Dynamic large-muscle work suits. Avoid breath-holding and very heavy lifts if BP is poorly controlled. Take a careful history and decide on further testing case by case (ADA 2026).'],
+ ['Foot ulcer or Charcot foot history','Current wounds, offloading, podiatry plan.','Needs a closer look before exercise, not a ban. Non-weight-bearing options keep fitness going while the foot is protected.']
+];
+function renderComp(){$('#comp-list').innerHTML=COMP.map(([h,a,r])=>`<details class="acc"><summary>${esc(h)}</summary><div><p><b>Assess and watch:</b> ${esc(a)}</p><p><b>Exercise response:</b> ${esc(r)}</p></div></details>`).join('');}
+
+/* ===== stories ===== */
+const STORIES=[
+ {id:'kevin',name:'Kevin, 65',src:'Workbook case',type:'Type 2 diabetes since 2014',
+  know:['Hypertension since 2012; type 2 diabetes since 2014','Persistent right shoulder pain (moderate OA, no red flags); fractured left ankle after a fall in 2020','Metformin, semaglutide (Ozempic), ramipril','Full-time banker, long days and overtime; lives with supportive wife and two adult sons','Waist 120 cm, height 169 cm, weight 100 kg; BP 140/85, resting HR 80','Grip R 42 kg, L 39 kg; 30-s sit-to-stand 16 reps at RPE 7, HR 162','Walks the dog twice a week (about 30 min); played baseball and cricket until 20 years ago'],
+  believe:['"I go really hard for a few weeks, then stop."','"Sticking to exercise long term just might not be for me."','"If I exercise hard enough, maybe I won\'t need to worry as much about diet."'],
+  qs:['What matters most in Kevin\'s story?','What could derail a technically excellent program?','How would your hypo education differ from a client on rapid-acting insulin?','What is Kevin\'s minimum viable session on a hard workday?'],
+  goals:'Walk the dog without being limited by breathlessness; build a routine he can sustain around work; be more active with his sons.',
+  day:{type:'t2',med:'glp',carb:70,ex:'walk',ext:18,plan:false,pmw:false,sit:false,sleep:false,stress:true,train:0}},
+ {id:'priya',name:'Priya, 31',src:'Example person',type:'Type 1 diabetes since age 12',
+  know:['Uses an insulin pump with automated insulin delivery and a CGM','Primary school teacher; plays social netball on Tuesday evenings','Had an overnight low after netball last month and woke her partner','HbA1c 7.1%; time in range about 65%','No known complications'],
+  believe:['"If I exercise at night I\'ll go low while I sleep."','"I\'d rather keep my glucose high before netball, just in case."','"My pump should sort it out by itself."'],
+  qs:['What exercise-safety questions matter more here than for Kevin?','Where does fear of hypoglycaemia show up, and how would you address it?','What would you ask about the night after netball?','Who sets the insulin changes, and what is your role?'],
+  goals:'Keep playing netball without overnight lows; build leg strength for running.',
+  day:{type:'t1',aid:true,bolus:0,carb:60,ex:'hiit',ext:19,plan:false,pmw:false,sit:false,sleep:false,stress:false,train:4}},
+ {id:'sam',name:'Sam, 47',src:'Example person',type:'Prediabetes',
+  know:['HbA1c 6.2% (44 mmol/mol); fasting glucose 6.4 mmol/L','Mother has type 2 diabetes','Hospital nurse on rotating shifts including nights; sleeps 5–6 hours','On their feet all shift but does no planned exercise','Sore right knee on stairs; no medicines'],
+  believe:['"It\'s not diabetes yet, so I\'ll deal with it later."','"I\'m on my feet all shift, so that counts as exercise."','"There\'s no point exercising when my roster changes every week."'],
+  qs:['Why is prediabetes the best time to act?','How do shift work and short sleep change glucose?','What would a roster-proof week look like?','How does the knee change your plan, and how does it not?'],
+  goals:'Avoid going onto diabetes medicines; feel less wrecked after night shifts.',
+  day:{type:'pre',carb:70,ex:'none',ext:17,plan:false,pmw:false,sit:false,sleep:true,stress:true,train:0}}
+];
+function renderStories(){$('#stories').innerHTML=STORIES.map(s=>`<article class="panel story"><header><h3>${esc(s.name)}</h3><span class="pill">${esc(s.type)}</span><span class="tiny">${esc(s.src)}</span></header>
+  <div class="cols2"><div class="box know"><h4>What we know</h4><ul class="clean">${s.know.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+  <div class="box believe"><h4>What ${esc(s.name.split(',')[0])} believes</h4><ul class="clean">${s.believe.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div>
+  <p><b>Goals:</b> ${esc(s.goals)}</p>
+  <div class="team-only"><span class="eyebrow">Reasoning prompts</span><ul class="clean" style="margin-top:6px">${s.qs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+  <div class="row"><button class="btn primary" data-story="${s.id}">Open ${esc(s.name.split(',')[0])}'s day</button></div></article>`).join('');}
+$('#stories').addEventListener('click',e=>{const b=e.target.closest('[data-story]');if(!b)return;const s=STORIES.find(x=>x.id===b.dataset.story);Object.assign(day,{type:'t2',med:'met',aid:false,bolus:0},s.day);syncDayCtl();location.hash='#day';});
+
+/* ===== plan ===== */
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const FORMAL={none:'Rest day',walk:'Walk or ride, 30 min',res:'Resistance session',both:'Walk + resistance',short:'Short session, 10–15 min'};
+const planDefault={days:[{f:'walk',pm:true,sit:true,b:'10-min walk at lunch'},{f:'res',pm:false,sit:true,b:'Sit-to-stands during TV ads'},{f:'none',pm:true,sit:true,b:''},{f:'walk',pm:false,sit:true,b:'Walk the dog round the block'},{f:'res',pm:true,sit:false,b:'2 sets of wall push-ups'},{f:'walk',pm:false,sit:false,b:'Walk with family'},{f:'none',pm:true,sit:false,b:''}],goal:'',mvs:'',example:true};
+let plan=store.get('plan',planDefault);
+function renderWeek(){$('#week').innerHTML=(plan.example?`<p class="tiny">Example week loaded. Change any day to make it yours.</p>`:'')+DAYS.map((d,i)=>{const x=plan.days[i];return `<div class="day"><b>${d}</b>
+  <select data-i="${i}" data-k="f" aria-label="${d} formal exercise">${Object.entries(FORMAL).map(([k,v])=>`<option value="${k}" ${x.f===k?'selected':''}>${v}</option>`).join('')}</select>
+  <div class="moves"><label><input type="checkbox" data-i="${i}" data-k="pm" ${x.pm?'checked':''}> Walk after a meal</label><label><input type="checkbox" data-i="${i}" data-k="sit" ${x.sit?'checked':''}> Sitting breaks</label>
+  <input type="text" data-i="${i}" data-k="b" value="${esc(x.b)}" placeholder="Back-up if the day goes wrong" aria-label="${d} back-up plan"></div></div>`;}).join('');
+  $('#plan-goal').value=plan.goal;$('#plan-mvs').value=plan.mvs;renderPlanCheck();}
+function planStats(){let aer=0,resDays=[],gap=0,maxGap=0;plan.days.forEach((x,i)=>{const a=(x.f==='walk'||x.f==='both')?30:x.f==='short'?12:0;aer+=a+(x.pm?10:0);if(x.f==='res'||x.f==='both')resDays.push(i);const active=x.f!=='none'||x.pm;gap=active?0:gap+1;maxGap=Math.max(maxGap,gap);});
+  let backToBack=resDays.some((d,i)=>i&&d-resDays[i-1]===1)||(resDays.includes(0)&&resDays.includes(6));return{aer,res:resDays.length,maxGap,backToBack};}
+function renderPlanCheck(){const s=planStats();const it=(ok,h,t)=>`<div class="callout ${ok?'':'orange'}"><strong>${esc(h)}</strong><p>${esc(t)}</p></div>`;
+  $('#plan-check').innerHTML=it(s.aer>=150,`About ${s.aer} aerobic minutes`,s.aer>=150?'At or above the 150-minute guideline destination.':'The guideline destination is 150+ minutes a week, but the right start is what can be repeated. Build up by adding a day or 5–10 minutes.')+
+   it(s.res>=2&&!s.backToBack,`${s.res} resistance ${s.res===1?'day':'days'}`,s.res<2?'Aim for 2–3 resistance sessions a week.':s.backToBack?'Spread resistance sessions onto non-consecutive days.':'2–3 sessions on non-consecutive days is the target.')+
+   it(s.maxGap<=2,`Longest break: ${s.maxGap} ${s.maxGap===1?'day':'days'}`,s.maxGap<=2?'No more than 2 days in a row without activity.':'Try not to go more than 2 days in a row without moving. A walk after a meal counts.');}
+function savePlan(){plan.example=false;store.set('plan',plan);}
+$('#week').addEventListener('change',e=>{const el=e.target,i=Number(el.dataset.i),k=el.dataset.k;if(!k)return;plan.days[i][k]=el.type==='checkbox'?el.checked:el.value;savePlan();renderPlanCheck();});
+$('#week').addEventListener('input',e=>{const el=e.target;if(el.dataset.k==='b'){plan.days[Number(el.dataset.i)].b=el.value;savePlan();}});
+$('#plan-goal').addEventListener('input',e=>{plan.goal=e.target.value;savePlan();});
+$('#plan-mvs').addEventListener('input',e=>{plan.mvs=e.target.value;savePlan();});
+$('#plan-copy').addEventListener('click',()=>{const s=planStats();const txt=['My exercise week (PACE Health)','',plan.goal?'What matters most: '+plan.goal:'',plan.mvs?'Minimum session on a hard day: '+plan.mvs:'','',...DAYS.map((d,i)=>{const x=plan.days[i];return `${d}: ${FORMAL[x.f]}${x.pm?' + walk after a meal':''}${x.sit?' + sitting breaks':''}${x.b?' | Back-up: '+x.b:''}`;}),'',`About ${s.aer} aerobic minutes, ${s.res} resistance days, longest break ${s.maxGap} days.`].filter((l,i,a)=>!(l===''&&a[i-1]==='')).join('\n');
+  const done=()=>{$('#plan-copied').textContent='Copied';setTimeout(()=>$('#plan-copied').textContent='',2000);};
+  const fall=()=>{const ta=$('#plan-text');ta.hidden=false;ta.value=txt;ta.select();$('#plan-copied').textContent='Select and copy the text below';};
+  try{navigator.clipboard.writeText(txt).then(done,fall);}catch(e){fall();}});
+
+/* ===== quiz ===== */
+const QUIZ=[
+ {q:'Kevin takes metformin and semaglutide. What is his risk of a low during a 45-minute walk?',o:['High: he needs 30 g of carbohydrate first','Low: these medicines rarely cause lows on their own','It depends only on his HbA1c'],a:1,e:'Medication sets most of the exercise-low risk. Insulin and sulfonylureas carry it; metformin and GLP-1 RAs rarely cause lows alone.'},
+ {q:'Why can glucose rise during sprint intervals?',o:['Muscle stops using glucose','Adrenaline drives the liver to release glucose faster than muscle uses it','Exercise breaks down insulin'],a:1,e:'Catecholamines raise hepatic glucose output. The rise is expected and usually settles.'},
+ {q:'A person with type 1 diabetes has glucose 16 mmol/L and blood ketones 1.8 mmol/L before training. What now?',o:['Exercise; it will bring glucose down','Light exercise only for under 30 minutes','Do not exercise; address the ketones first'],a:2,e:'Blood ketones of 1.5 or more are a reason not to exercise (Riddell 2017). Exercise with insulin deficiency can worsen hyperglycaemia and ketosis.'},
+ {q:'How does contracting muscle take in glucose when insulin is low?',o:['Contraction moves GLUT4 doors to the cell surface through its own signalling','Muscle makes its own insulin','Glucose leaks through the membrane when it is warm'],a:0,e:'Contraction-mediated GLUT4 translocation works separately from, and adds to, the insulin pathway.'},
+ {q:'After one session, how long does improved insulin sensitivity last?',o:['Only during the session','Up to about 24–48 hours, then it fades','About a week'],a:1,e:'The effect fades, so regular movement matters more than treating 48 hours as an on-off switch.'},
+ {q:'Which review question is most useful after an insulin user tries a new session?',o:['"What was your glucose when you left?"','"What happened later that afternoon, evening and overnight?"','"Did it feel hard?"'],a:1,e:'Delayed lows matter, especially overnight and after afternoon exercise.'},
+ {q:'A client on a GLP-1 RA is losing weight quickly. What protects their lean mass best?',o:['More walking only','Progressive resistance training','Stopping exercise until weight is stable'],a:1,e:'Up to about 39% of weight lost on semaglutide was lean mass (STEP-1). The ADA 2026 recommends muscle strengthening with obesity medicines.'},
+ {q:'Which program is an excellent program?',o:['The one with the best FITT on paper','The one the person is still doing in six months','The hardest one they can tolerate'],a:1,e:'If it looks excellent on paper but they will not be doing it in six months, it is not yet excellent.'}
+];
+const qState=QUIZ.map(()=>null);
+function renderQuiz(){$('#quiz').innerHTML=QUIZ.map((x,i)=>`<div class="panel qcard"><span class="eyebrow">Question ${i+1}</span><b style="color:var(--head)">${esc(x.q)}</b><div class="opts">${x.o.map((o,j)=>`<button data-q="${i}" data-o="${j}" ${qState[i]!=null?'disabled':''} class="${qState[i]!=null?(j===x.a?'right':j===qState[i]?'wrong':''):''}">${esc(o)}</button>`).join('')}</div>${qState[i]!=null?`<p style="font-size:14.5px">${qState[i]===x.a?'<b style="color:var(--ok)">Right.</b> ':'<b style="color:var(--bad)">Not quite.</b> '}${esc(x.e)}</p>`:''}</div>`).join('');
+  const n=qState.filter(v=>v!=null).length,r=qState.filter((v,i)=>v===QUIZ[i].a).length;$('#quiz-score').textContent=n===QUIZ.length?`${r} of ${QUIZ.length} right`:`${n} of ${QUIZ.length} answered`;}
+$('#quiz').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!b)return;qState[Number(b.dataset.q)]=Number(b.dataset.o);renderQuiz();});
+
+/* ===== sources ===== */
+const SOURCES=[
+ ['American Diabetes Association. Standards of Care in Diabetes—2026, Section 5.','https://education.weitzmaninstitute.org/sites/default/files/course/2025-12/Facilitating%20Positive%20Health%20Behaviors%20and%20Well-being%20to%20Improve%20Health%20Outcomes%20-%20Standards%20of%20Care%20in%20Diabetes-2026.pdf'],
+ ['Riddell MC et al. Exercise management in type 1 diabetes: a consensus statement. Lancet Diabetes Endocrinol 2017.','https://ddg.info/fileadmin/user_upload/Riddel_Exercise_Management_in_type_1_diabetes_Lancet_2017.pdf'],
+ ['Moser O, Zaharieva DP et al. Automated insulin delivery around exercise: EASD/ISPAD position statement. Diabetologia 2025.','https://link.springer.com/article/10.1007/s00125-024-06308-z'],
+ ['Kanaley JA et al. ACSM consensus statement on exercise and type 2 diabetes. MSSE 2022 (summary).','https://medicaldialogues.in/diabetes-endocrinology/guidelines/acsm-consensus-statement-on-physical-activity-in-patients-with-type-2-diabetes-87507'],
+ ['Battelino T et al. International consensus on time in range. Diabetes Care 2019 (summary).','https://dagensdiabetes.se/ada-report-new-intern-statement-on-time-in-range-tir-for-cgm-diab-care/'],
+ ['Australian Diabetes Society. Prediabetes position statement summary, 2020.','https://diabetessociety.com.au/downloads/covid-19-articles/20200615%20ADS_Summary_Prediabetes_Position_Statement.pdf'],
+ ['NDSS. Hypoglycaemia.','https://www.ndss.com.au/living-with-diabetes/management-and-care/hypoglycaemia/'],
+ ['IDF Diabetes Atlas, 11th edition, 2025.','https://diabetesatlas.org/media/uploads/2025/04/2025-IDF-Diabetes-Atlas-Press-Release-FINAL-Embargo.pdf'],
+ ['Umpierre D et al. Structured exercise training and HbA1c. JAMA 2011 (summary).','https://www.sciencedaily.com/releases/2011/05/110503161402.htm'],
+ ['DPP Outcomes Study, 15-year findings (summary).','https://blogs.the-hospitalist.org/content/long-term-findings-dppos-unveiled'],
+ ['Emerging Risk Factors Collaboration. Diabetes and vascular disease risk. Lancet 2010.','https://publications.mrc-epid.cam.ac.uk/publication/5390'],
+ ['Pereira RM et al. Mechanisms of glucose uptake in muscle at rest and with exercise. Motriz 2017.','https://www.scielo.br/j/motriz/a/xQwdfk3DWVGcxX4cxqkXT9s/?lang=en'],
+ ['Buffey AJ et al. Walking and standing breaks and postprandial glucose. Sports Med 2022 (summary).','https://edition.cnn.com/2022/09/02/health/walking-blood-sugar-study-wellness/index.html'],
+ ['STEP-1 and SURMOUNT-1 body composition (review).','https://www.barbellmedicine.com/blog/glp-1-muscle-loss/'],
+ ['Perrin N et al. Diabetes distress in type 2 diabetes. Diabet Med 2017.','https://pure.uhi.ac.uk/en/publications/the-prevalence-of-diabetes-specific-emotional-distress-in-people-/'],
+ ['International consensus on ending diabetes stigma. Lancet Diabetes Endocrinol 2024 (summary).','https://thelimbic.com/endocrinology/aussie-leads-international-calls-to-end-diabetes-stigma/'],
+ ['Brazeau AS et al. Barriers to physical activity in type 1 diabetes. Diabetes Care 2008 (summary).','https://www.eurekalert.org/news-releases/636223'],
+ ['GPnotebook. SGLT2 inhibitors and diabetic ketoacidosis.','https://gpnotebook.com/en-AU/pages/diabetes-and-endocrinology/sglt-2-inhibitors-and-diabetic-ketoacidosis'],
+ ['Puchalska P, Crawford PA. Multi-dimensional roles of ketone bodies in fuel metabolism, signaling, and therapeutics. Cell Metab 2017.','https://pmc.ncbi.nlm.nih.gov/articles/PMC5313038'],
+ ['Arima Y. Ketone body metabolism, mitochondrial function and cardiovascular disease. J Atheroscler Thromb 2023.','https://www.jstage.jst.go.jp/article/jat/30/12/30_RV22011/_html/-char/ja'],
+ ['β-Hydroxybutyrate inhibits insulin-mediated glucose transport in mouse oxidative muscle. Am J Physiol Endocrinol Metab 2010.','https://www.sciencegate.app/document/10.1152/ajpendo.00142.2010'],
+ ['Brown BE, Dean RT, Davies MJ. Glycation of LDL gives rise to lipid-laden cells. Diabetologia 2005.','https://link.springer.com/content/pdf/10.1007/s00125-004-1648-4.pdf'],
+ ['Li Z-H et al. Advanced glycation end products in cardiovascular diseases. Front Cardiovasc Med 2025.','https://www.frontiersin.org/journals/cardiovascular-medicine/articles/10.3389/fcvm.2025.1637252/pdf'],
+ ['Qiu S et al. Exercise training and endothelial function in type 2 diabetes: a meta-analysis. Cardiovasc Diabetol 2018.','https://doaj.org/article/c19d9771129f459e995bfec896552eb8'],
+ ['GPnotebook. Diabetic ketoacidosis: pathogenesis.','https://gpnotebook.com/en-AU/pages/diabetes-and-endocrinology/diabetic-ketoacidosis/pathogenesis']
+];
+function renderSources(){$('#sources').innerHTML='<ul class="clean">'+SOURCES.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join('')+'</ul>';}
+
+/* ===== boot ===== */
+buildMyths();buildMap();buildBodyFig();buildCell();buildPanc();buildLiver();buildVessel();$('#v-yrs').value=ves.yrs;setZoom('cell');renderMap();syncDayCtl();
+$('#ad-min').value=lens.min;$('#ad-res').value=lens.res;$('#ad-wk').value=lens.wk;
+renderMeds();renderHypo();renderT1();renderComp();renderStories();renderWeek();renderQuiz();renderSources();
+setMode(mode);route();
+let last=performance.now(),liveAcc=1;const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(view==='body'&&!document.hidden){const d=reduce?dt*.3:dt;stepGlucose(dt);liveAcc+=dt;if(liveAcc>.2){liveAcc=0;liveUpdate();}if(mapView==='organ')stepMap(d);else stepBody(d);stepZoom(d);stepKet(dt);}requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+
+</script>
+
+</body>
+</html>
